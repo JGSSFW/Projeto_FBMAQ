@@ -1,0 +1,103 @@
+/* ============================
+   Estilo base e fontes
+============================ */
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #121212; /* Fundo escuro */
+}
+
+/* ============================
+   Estilo do container com efeito glassmorphism
+============================ */
+.glass-container {
+  background: rgba(169, 169, 169, 0.1); /* Transparência sutil */
+  -webkit-backdrop-filter: blur(10px);  /* Suporte Safari */
+  backdrop-filter: blur(10px);          /* Efeito de desfoque */
+  border: 1px solid rgba(255, 255, 255, 0.15); /* Borda translúcida */
+}
+
+/* ============================
+   Efeito neon pulsante (vermelho)
+============================ */
+@keyframes pulse-red {
+  0%, 100% {
+    box-shadow: 0 0 10px rgba(255, 50, 50, 0.4), 0 0 15px rgba(255, 50, 50, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 25px rgba(255, 0, 0, 0.8), 0 0 40px rgba(255, 0, 0, 0.6);
+  }
+}
+
+.neon-shadow {
+  animation: pulse-red 4s infinite ease-in-out;
+}
+
+/* ============================
+   Efeito "brilho" ao passar mouse sobre botão
+============================ */
+.shine-effect {
+  position: relative;
+  overflow: hidden;
+}
+
+.shine-effect::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.25) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: skewX(-25deg);
+  transition: left 0.6s ease-in-out;
+}
+
+.shine-effect:hover::before {
+  left: 150%;
+}
+
+/* ============================
+   Correção de estilo no autofill do navegador
+============================ */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px #1C1C1C inset !important;
+  -webkit-text-fill-color: #FFFFFF !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* ============================
+   Estilo dos campos com rótulo flutuante
+============================ */
+.form-control {
+  position: relative;
+}
+
+.form-input {
+  background-color: #1C1C1C;
+}
+
+.form-label {
+  position: absolute;
+  top: 0.85rem;
+  left: 0.75rem;
+  color: #9CA3AF; /* gray-400 */
+  pointer-events: none;
+  transition: all 0.2s ease-out;
+}
+
+/* Estilo do label ao focar ou preencher o campo */
+.form-input:focus ~ .form-label,
+.form-input:not(:placeholder-shown) ~ .form-label {
+  transform: translateY(-1.4rem) scale(0.8);
+  color: #F87171; /* red-400 */
+  background-color: #1C1C1C;
+  padding: 0 0.25rem;
+}
