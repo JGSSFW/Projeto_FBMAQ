@@ -74,7 +74,7 @@
     <div id="sidebar-overlay" class="fixed inset-0 bg-black/60 z-10 hidden md:hidden"></div>
 
     <!-- Barra Lateral (Sidebar) -->
-    <aside id="sidebar" class="glass-sidebar fixed top-0 left-0 h-full z-20 flex flex-col transition-transform duration-300 ease-in-out -translate-x-full w-64 md:w-20 data-[state=closed]:-translate-x-full md:data-[state=closed]:translate-x-0 data-[expanded=true]:w-64">
+    <aside id="sidebar" class="glass-sidebar fixed top-0 left-0 h-full z-20 flex flex-col transition-transform duration-300 ease-in-out -translate-x-full w-64 md:w-20 data-[expanded=true]:w-64">
         <div class="p-4 flex justify-center items-center flex-shrink-0">
             <button id="home-button" class="p-2 rounded-lg hover:bg-red-800/50 transition-colors">
                 <img src="../assets/images/logo.png" alt="Logo" class="neon-icon h-10 w-10 object-contain" onerror="this.onerror=null; this.src='https://placehold.co/40x40/1C1C1C/FFFFFF?text=L';">
@@ -117,7 +117,7 @@
                 </button>
             </div>
             <div class="text-center mb-12">
-                <img src="../assets/images/logo.png" alt="Logo da Empresa" class="mx-auto h-24 w-auto mb-4" onerror="this.onerror=null; this.src='https://placehold.co/300x96/121212/FFFFFF?text=Logo';">
+                <img src="../assets/images/logo.png" alt="Logo da Empresa" class="mx-auto h-40 w-auto mb-4" onerror="this.onerror=null; this.src='https://placehold.co/300x96/121212/FFFFFF?text=Logo';">
                 <h1 class="text-3xl font-bold text-white">Bem-vindo, <span id="user-display-name">...</span>!</h1>
             </div>
             <div class="w-full max-w-5xl grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -205,7 +205,7 @@
             mainContentTitle.textContent = targetTitle;
             hamburgerButton.classList.remove('hidden');
             
-            pageContent.classList.add(sidebar.dataset.expanded === 'true' ? 'md:ml-64' : 'md:ml-20');
+            pageContent.style.marginLeft = (window.innerWidth >= 768) ? (sidebar.dataset.expanded === 'true' ? '16rem' : '5rem') : '0';
         }
 
         function showInitialMenu() {
@@ -215,9 +215,11 @@
             sidebar.dataset.state = 'closed';
             if (window.innerWidth < 768) {
                 sidebar.classList.add('-translate-x-full');
+            } else {
+                sidebar.classList.add('-translate-x-full');
             }
             hamburgerButton.classList.add('hidden');
-            pageContent.classList.remove('md:ml-20', 'md:ml-64');
+            pageContent.style.marginLeft = '0';
         }
 
         menuCards.forEach(card => {
@@ -242,8 +244,7 @@
         toggleSidebarButton.addEventListener('click', () => {
             const isExpanded = sidebar.dataset.expanded === 'true';
             sidebar.dataset.expanded = !isExpanded;
-            pageContent.classList.toggle('md:ml-20', isExpanded);
-            pageContent.classList.toggle('md:ml-64', !isExpanded);
+            pageContent.style.marginLeft = (window.innerWidth >= 768) ? (!isExpanded ? '16rem' : '5rem') : '0';
             sidebarSpans.forEach(span => {
                 span.dataset.expanded = !isExpanded;
             });
