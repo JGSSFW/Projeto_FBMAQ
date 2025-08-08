@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Usuários</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #121212;
+            color: #E0E0E0;
+        }
+        .glass-container {
+            background: rgba(28, 28, 28, 0.6);
+            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        @keyframes pulse-red {
+            0%, 100% { box-shadow: 0 0 10px rgba(255, 50, 50, 0.4), 0 0 15px rgba(255, 50, 50, 0.3); }
+            50% { box-shadow: 0 0 25px rgba(255, 0, 0, 0.8), 0 0 40px rgba(255, 0, 0, 0.6); }
+        }
+        .neon-shadow {
+            animation: pulse-red 6s infinite ease-in-out;
+        }
+        .shine-effect {
+            position: relative;
+            overflow: hidden;
+        }
+        .shine-effect::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(120deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0) 100%);
+            transform: skewX(-25deg);
+            transition: left 0.7s ease-in-out;
+        }
+        .shine-effect:hover::before {
+            left: 150%;
+        }
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover, 
+        input:-webkit-autofill:focus, 
+        input:-webkit-autofill:active {
+            -webkit-box-shadow: 0 0 0 30px #1C1C1C inset !important;
+            -webkit-text-fill-color: #FFFFFF !important;
+            transition: background-color 5000s ease-in-out 0s;
+        }
+        .form-control {
+            position: relative;
+        }
+        .form-input {
+            background-color: #1C1C1C;
+        }
+        .form-label {
+            position: absolute;
+            top: 0.85rem;
+            left: 0.75rem;
+            color: #9CA3AF;
+            pointer-events: none;
+            transition: all 0.2s ease-out;
+        }
+        .form-input:focus ~ .form-label,
+        .form-input:not(:placeholder-shown) ~ .form-label {
+            transform: translateY(-1.4rem) scale(0.8);
+            color: #F87171;
+            background-color: #1C1C1C;
+            padding: 0 0.25rem;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+
+    <div class="w-full max-w-2xl p-8 space-y-8 glass-container neon-shadow rounded-2xl">
+        <div class="text-center">
+            <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-16 w-16 mb-4 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" /></svg>
+            <h2 class="text-3xl font-bold text-white">Cadastro de Usuários</h2>
+        </div>
+        <form id="signup-form" class="mt-8 space-y-6">
+            <div class="grid grid-cols-1 gap-6">
+                <div class="form-control"><input id="name" type="text" required class="form-input appearance-none rounded-md relative block w-full px-3 py-3 border border-gray-600 placeholder-transparent text-white focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm" placeholder="Primeiro Nome"><label for="name" class="form-label">Primeiro Nome</label></div>
+                <div class="form-control"><input id="email" type="email" autocomplete="email" required class="form-input appearance-none rounded-md relative block w-full px-3 py-3 border border-gray-600 placeholder-transparent text-white focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm" placeholder="Email"><label for="email" class="form-label">Email</label></div>
+                <div>
+                    <div class="form-control relative">
+                        <input id="password" type="password" autocomplete="new-password" required class="form-input appearance-none rounded-md relative block w-full pl-3 pr-12 py-3 border border-gray-600 placeholder-transparent text-white focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm" placeholder="Senha">
+                        <label for="password" class="form-label">Senha</label>
+                        <button type="button" class="toggle-password absolute inset-y-0 right-0 z-20 px-3 flex items-center text-gray-400 hover:text-white" data-target="#password">
+                            <svg class="eye-open h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z" /><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.022 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" /></svg>
+                            <svg class="eye-closed h-5 w-5 hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3.707 2.293a1 1 0 00-1.414 1.414l14 14a1 1 0 001.414-1.414l-1.473-1.473A10.014 10.014 0 0019.542 10C18.268 5.943 14.478 3 10 3a9.958 9.958 0 00-4.512 1.074L3.707 2.293zM10 12a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" /><path d="M2 10s3.939 7 8 7 8-7 8-7-3.939-7-8-7-8 7-8 7zm7.999-4a4 4 0 100 8 4 4 0 000-8z" /></svg>
+                        </button>
+                    </div>
+                    <div class="mt-2 text-xs space-y-1">
+                        <div id="req-length" class="flex items-center text-gray-500 transition-colors"><svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>Pelo menos 8 caracteres</div>
+                        <div id="req-uppercase" class="flex items-center text-gray-500 transition-colors"><svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>Uma letra maiúscula</div>
+                        <div id="req-lowercase" class="flex items-center text-gray-500 transition-colors"><svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>Uma letra minúscula</div>
+                        <div id="req-number" class="flex items-center text-gray-500 transition-colors"><svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>Um número</div>
+                        <div id="req-symbol" class="flex items-center text-gray-500 transition-colors"><svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>Um símbolo (@, !, etc)</div>
+                    </div>
+                </div>
+                <div>
+                    <div class="form-control relative">
+                        <input id="confirm-password" type="password" autocomplete="new-password" required class="form-input appearance-none rounded-md relative block w-full pl-3 pr-12 py-3 border border-gray-600 placeholder-transparent text-white focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm" placeholder="Confirmar Senha">
+                        <label for="confirm-password" class="form-label">Confirmar Senha</label>
+                        <button type="button" class="toggle-password absolute inset-y-0 right-0 z-20 px-3 flex items-center text-gray-400 hover:text-white" data-target="#confirm-password">
+                            <svg class="eye-open h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z" /><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.022 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" /></svg>
+                            <svg class="eye-closed h-5 w-5 hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3.707 2.293a1 1 0 00-1.414 1.414l14 14a1 1 0 001.414-1.414l-1.473-1.473A10.014 10.014 0 0019.542 10C18.268 5.943 14.478 3 10 3a9.958 9.958 0 00-4.512 1.074L3.707 2.293zM10 12a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" /><path d="M2 10s3.939 7 8 7 8-7 8-7-3.939-7-8-7-8 7-8 7zm7.999-4a4 4 0 100 8 4 4 0 000-8z" /></svg>
+                        </button>
+                    </div>
+                    <div id="password-match-message" class="text-sm text-center mt-2 h-4"></div>
+                </div>
+            </div>
+            <div class="flex gap-4">
+                <a href="../pages/menu.html" class="w-full text-center py-3 px-4 rounded-md text-gray-300 hover:bg-gray-700 transition-colors">Voltar</a>
+                <button type="submit" class="shine-effect group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-red-800 bg-opacity-80 hover:bg-red-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 focus:ring-offset-gray-800 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                    <span class="button-text">Cadastrar</span>
+                    <svg class="animate-spin h-5 w-5 text-white hidden button-spinner" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                </button>
+            </div>
+            <div id="signup-success-message" class="text-center text-green-400 text-sm font-medium hidden pt-2"></div>
+            <div id="signup-error-message" class="text-center text-red-400 text-sm font-medium hidden pt-2"></div>
+        </form>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAWlLRvbcxZQvjzW7KT4A7Ls-iJ0I4BAGI",
+            authDomain: "fb-maq.firebaseapp.com",
+            projectId: "fb-maq",
+            storageBucket: "fb-maq.firebasestorage.app",
+            messagingSenderId: "782633097930",
+            appId: "1:782633097930:web:281c9ac26470939449b233"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                window.location.href = '/index.html';
+            }
+        });
+
+        const signupForm = document.getElementById('signup-form');
+        if (signupForm) {
+
+            const successMessage = document.getElementById('signup-success-message');
+            const errorMessage = document.getElementById('signup-error-message');
+            const submitButton = signupForm.querySelector('button[type="submit"]');
+            const buttonText = submitButton.querySelector('.button-text');
+            const buttonSpinner = submitButton.querySelector('.button-spinner');
+            const passwordInput = signupForm.querySelector('#password');
+            const confirmPasswordInput = signupForm.querySelector('#confirm-password');
+            const passwordMatch = document.getElementById('password-match-message');
+
+            const togglePasswordButtons = signupForm.querySelectorAll('.toggle-password');
+            togglePasswordButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const targetInput = signupForm.querySelector(button.dataset.target);
+                    const type = targetInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                    targetInput.setAttribute('type', type);
+                    button.querySelector('.eye-open').classList.toggle('hidden');
+                    button.querySelector('.eye-closed').classList.toggle('hidden');
+                });
+            });
+
+            const requirements = {
+                length: document.getElementById('req-length'),
+                uppercase: document.getElementById('req-uppercase'),
+                lowercase: document.getElementById('req-lowercase'),
+                number: document.getElementById('req-number'),
+                symbol: document.getElementById('req-symbol'),
+            };
+
+            passwordInput.addEventListener('input', validateFormState);
+            confirmPasswordInput.addEventListener('input', validateFormState);
+
+            function validateFormState() {
+                const password = passwordInput.value;
+                const confirmPassword = confirmPasswordInput.value;
+
+                const checks = {
+                    length: password.length >= 8,
+                    uppercase: /[A-Z]/.test(password),
+                    lowercase: /[a-z]/.test(password),
+                    number: /\d/.test(password),
+                    symbol: /[^a-zA-Z\d]/.test(password)
+                };
+
+                updateRequirement(requirements.length, checks.length);
+                updateRequirement(requirements.uppercase, checks.uppercase);
+                updateRequirement(requirements.lowercase, checks.lowercase);
+                updateRequirement(requirements.number, checks.number);
+                updateRequirement(requirements.symbol, checks.symbol);
+
+                const allStrengthMet = Object.values(checks).every(Boolean);
+                const passwordsMatch = password === confirmPassword && password.length > 0;
+                
+                submitButton.disabled = !(allStrengthMet && passwordsMatch);
+
+                checkPasswordMatchVisuals();
+            }
+
+            function updateRequirement(element, met) {
+                if (met) {
+                    element.classList.remove('text-gray-500');
+                    element.classList.add('text-green-400');
+                    element.querySelector('svg').innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />`;
+                } else {
+                    element.classList.remove('text-green-400');
+                    element.classList.add('text-gray-500');
+                    element.querySelector('svg').innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />`;
+                }
+            }
+
+            function checkPasswordMatchVisuals() {
+                const password = passwordInput.value;
+                const confirmPassword = confirmPasswordInput.value;
+                if (confirmPassword.length > 0) {
+                    passwordMatch.classList.remove('hidden');
+                    if (password === confirmPassword) {
+                        passwordMatch.textContent = 'As senhas coincidem';
+                        passwordMatch.classList.remove('text-red-400');
+                        passwordMatch.classList.add('text-green-400');
+                    } else {
+                        passwordMatch.textContent = 'As senhas não coincidem';
+                        passwordMatch.classList.remove('text-green-400');
+                        passwordMatch.classList.add('text-red-400');
+                    }
+                } else {
+                    passwordMatch.classList.add('hidden');
+                }
+            }
+
+            signupForm.addEventListener('submit', async (event) => {
+                event.preventDefault();
+                errorMessage.classList.add('hidden');
+                successMessage.classList.add('hidden');
+                
+                submitButton.disabled = true;
+                buttonText.classList.add('hidden');
+                buttonSpinner.classList.remove('hidden');
+
+                const name = signupForm.querySelector('#name').value;
+                const email = signupForm.querySelector('#email').value;
+                const password = signupForm.querySelector('#password').value;
+
+                try {
+                    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                    
+                    await updateProfile(userCredential.user, {
+                        displayName: name
+                    });
+
+                    console.log('Usuário criado com sucesso:', userCredential.user);
+                    successMessage.textContent = `Usuário ${name} cadastrado com sucesso!`;
+                    successMessage.classList.remove('hidden');
+                    signupForm.reset();
+                    validateFormState(); // Reseta o estado do botão e dos requisitos
+
+                } catch (error) {
+                    console.error("Erro ao criar usuário:", error.code);
+                    switch (error.code) {
+                        case 'auth/email-already-in-use':
+                            errorMessage.textContent = 'Este email já está em uso.';
+                            break;
+                        case 'auth/weak-password':
+                            errorMessage.textContent = 'A senha deve ter pelo menos 6 caracteres.';
+                            break;
+                        case 'auth/invalid-email':
+                            errorMessage.textContent = 'O formato do email é inválido.';
+                            break;
+                        default:
+                            errorMessage.textContent = 'Ocorreu um erro ao criar o usuário.';
+                    }
+                    errorMessage.classList.remove('hidden');
+                } finally {
+                    submitButton.disabled = false;
+                    buttonText.classList.remove('hidden');
+                    buttonSpinner.classList.add('hidden');
+                }
+            });
+        }
+    </script>
+</body>
+</html>

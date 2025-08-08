@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão de Clientes</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #121212;
+            color: #E0E0E0;
+        }
+        .glass-container, .glass-modal {
+            background: rgba(28, 28, 28, 0.6);
+            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        @keyframes pulse-red {
+            0%, 100% { box-shadow: 0 0 10px rgba(255, 50, 50, 0.4), 0 0 15px rgba(255, 50, 50, 0.3); }
+            50% { box-shadow: 0 0 25px rgba(255, 0, 0, 0.8), 0 0 40px rgba(255, 0, 0, 0.6); }
+        }
+        .neon-shadow {
+            animation: pulse-red 6s infinite ease-in-out;
+        }
+        .form-input, .form-select {
+            background-color: #1C1C1C;
+        }
+        .form-control {
+            position: relative;
+        }
+        .form-label {
+            position: absolute;
+            top: 0.85rem;
+            left: 0.75rem;
+            color: #9CA3AF;
+            pointer-events: none;
+            transition: all 0.2s ease-out;
+        }
+        .form-input:focus ~ .form-label,
+        .form-input:not(:placeholder-shown) ~ .form-label,
+        .form-select:focus ~ .form-label,
+        .form-select:not([value=""]) ~ .form-label {
+            transform: translateY(-1.4rem) scale(0.8);
+            color: #F87171;
+            background-color: #2D2D2D;
+            padding: 0 0.25rem;
+        }
+        /* Correção para o fundo do autofill do navegador */
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover, 
+        input:-webkit-autofill:focus, 
+        input:-webkit-autofill:active {
+            -webkit-box-shadow: 0 0 0 30px #1C1C1C inset !important;
+            -webkit-text-fill-color: #FFFFFF !important;
+            transition: background-color 5000s ease-in-out 0s;
+        }
+        /* Cor do placeholder do select */
+        .form-select:invalid {
+            color: #9CA3AF;
+        }
+        .form-select option {
+            color: #E0E0E0;
+        }
+    </style>
+</head>
+<body class="min-h-screen p-8">
+
+    <!-- Modal de Cadastro de Cliente (começa oculto) -->
+    <div id="client-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 hidden">
+        <div class="glass-modal neon-shadow w-full max-w-2xl p-8 space-y-6 rounded-2xl">
+            <div class="flex justify-between items-center">
+                <h2 class="text-2xl font-bold text-white">Cadastrar Novo Cliente</h2>
+                <button id="close-modal-button" class="text-gray-400 hover:text-white">&times;</button>
+            </div>
+            <form id="add-client-form" class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="form-control">
+                        <select id="client-type" class="form-select w-full px-3 py-3 rounded-md border border-gray-600 focus:outline-none focus:ring-red-500 focus:border-red-500" required>
+                            <option value="" disabled selected>Selecione uma opção</option>
+                            <option value="fisica">Pessoa Física</option>
+                            <option value="juridica">Pessoa Jurídica</option>
+                        </select>
+                        <label for="client-type" class="form-label">Tipo de Pessoa</label>
+                    </div>
+                    <div class="form-control">
+                        <input id="cpfCnpj" type="text" required class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500 disabled:bg-gray-700/50 disabled:cursor-not-allowed" placeholder=" " disabled>
+                        <label id="cpfCnpj-label" for="cpfCnpj" class="form-label">CPF / CNPJ</label>
+                    </div>
+                </div>
+                <div class="form-control">
+                    <input id="razaoSocial" type="text" required class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
+                    <label for="razaoSocial" class="form-label">Razão Social / Nome</label>
+                </div>
+                <div class="form-control">
+                    <input id="telefone" type="text" required class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" " maxlength="15">
+                    <label for="telefone" class="form-label">Telefone</label>
+                </div>
+                <div class="form-control">
+                    <input id="endereco" type="text" required class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
+                    <label for="endereco" class="form-label">Endereço</label>
+                </div>
+                <div class="flex justify-end gap-4">
+                    <button type="button" id="cancel-button" class="py-2 px-4 rounded-md text-gray-300 hover:bg-gray-700">Cancelar</button>
+                    <button type="submit" class="py-2 px-4 rounded-md text-white bg-red-800 hover:bg-red-900">Salvar Cliente</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Conteúdo Principal da Página de Clientes -->
+    <div id="client-list-view" class="w-full">
+        <div class="flex flex-col md:flex-row justify-between items-center mb-8">
+            <h1 class="text-4xl font-bold text-white mb-4 md:mb-0">Clientes</h1>
+            <div class="flex items-center gap-4">
+                 <a href="../pages/menu.html" class="text-gray-300 hover:text-white transition-colors">Voltar</a>
+                <button id="add-client-button" class="w-full md:w-auto flex justify-center items-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-red-800 hover:bg-red-900">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" /></svg>
+                    Cadastrar Novo Cliente
+                </button>
+            </div>
+        </div>
+
+        <div class="glass-container rounded-2xl p-6">
+            <!-- Filtros de Pesquisa -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <input id="search-name" type="text" placeholder="Pesquisar por Nome..." class="form-input w-full px-3 py-2 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500">
+                <input id="search-cpfCnpj" type="text" placeholder="Pesquisar por CPF/CNPJ..." class="form-input w-full px-3 py-2 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500">
+                <input id="search-phone" type="text" placeholder="Pesquisar por Telefone..." class="form-input w-full px-3 py-2 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500">
+            </div>
+
+            <!-- Tabela de Clientes -->
+            <div class="overflow-x-auto">
+                <table class="w-full text-sm text-left text-gray-300">
+                    <thead class="text-xs text-gray-400 uppercase bg-gray-700/30">
+                        <tr>
+                            <th scope="col" class="py-3 px-6">Nome</th>
+                            <th scope="col" class="py-3 px-6">CPF/CNPJ</th>
+                            <th scope="col" class="py-3 px-6">Telefone</th>
+                            <th scope="col" class="py-3 px-6 text-center">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="clients-table-body">
+                        <!-- Linhas da tabela serão inseridas aqui pelo JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alterar a partir daqui -->
+    <div id="edit-client-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 hidden">
+        <div class="glass-modal neon-shadow w-full max-w-2xl p-8 space-y-6 rounded-2xl">
+            <div class="flex justify-between items-center">
+                <h2 class="text-2xl font-bold text-white">Detalhes do Cliente</h2>
+                <button id="edit-close-modal-button" class="text-gray-400 hover:text-white">&times;</button>
+            </div>
+            <form id="edit-client-form" class="space-y-6">
+                <input type="hidden" id="edit-client-id">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="form-control">
+                        <select id="edit-client-type" class="form-select w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" required>
+                            <option value="fisica">Pessoa Física</option>
+                            <option value="juridica">Pessoa Jurídica</option>
+                        </select>
+                        <label for="edit-client-type" class="form-label">Tipo de Pessoa</label>
+                    </div>
+                    <div class="form-control">
+                        <input id="edit-cpfCnpj" type="text" required class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
+                        <label id="edit-cpfCnpj-label" for="edit-cpfCnpj" class="form-label">CPF / CNPJ</label>
+                    </div>
+                </div>
+                <div class="form-control">
+                    <input id="edit-razaoSocial" type="text" required class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
+                    <label for="edit-razaoSocial" class="form-label">Razão Social / Nome</label>
+                </div>
+                <div class="form-control">
+                    <input id="edit-telefone" type="text" required class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" " maxlength="15">
+                    <label for="edit-telefone" class="form-label">Telefone</label>
+                </div>
+                <div class="form-control">
+                    <input id="edit-endereco" type="text" required class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
+                    <label for="edit-endereco" class="form-label">Endereço</label>
+                </div>
+                <div class="flex justify-between items-center gap-4 pt-4">
+                    <button type="button" id="delete-client-button" class="py-2 px-4 rounded-md text-white bg-red-800 hover:bg-red-900">Apagar</button>
+                    <div class="flex gap-4">
+                        <button type="button" id="edit-cancel-button" class="py-2 px-4 rounded-md text-gray-300 hover:bg-gray-700">Voltar</button>
+                        <button type="submit" class="py-2 px-4 rounded-md text-white bg-green-700 hover:bg-green-800">Salvar Alterações</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmação de Exclusão -->
+    <div id="delete-confirm-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 hidden">
+        <div class="glass-modal w-full max-w-md p-8 space-y-6 rounded-2xl text-center">
+            <h2 class="text-2xl font-bold text-white">Confirmar Exclusão</h2>
+            <p class="text-gray-300">Tem a certeza que deseja apagar o cliente <strong id="client-name-to-delete"></strong>? Esta ação não pode ser desfeita.</p>
+            <div class="flex justify-center gap-4 pt-4">
+                <button type="button" id="confirm-delete-button" class="py-2 px-4 rounded-md text-white bg-red-800 hover:bg-red-900">Confirmar Exclusão</button>
+                <button type="button" id="cancel-delete-button" class="py-2 px-4 rounded-md text-gray-300 hover:bg-gray-700">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, onSnapshot, addDoc, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAWlLRvbcxZQvjzW7KT4A7Ls-iJ0I4BAGI",
+            authDomain: "fb-maq.firebaseapp.com",
+            projectId: "fb-maq",
+            storageBucket: "fb-maq.firebasestorage.app",
+            messagingSenderId: "782633097930",
+            appId: "1:782633097930:web:281c9ac26470939449b233"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                window.location.href = '/index.html';
+            }
+        });
+
+        // --- Lógica da Página de Clientes ---
+        const clientsTableBody = document.getElementById('clients-table-body');
+        const searchName = document.getElementById('search-name');
+        const searchCpfCnpj = document.getElementById('search-cpfCnpj');
+        const searchPhone = document.getElementById('search-phone');
+        const addClientButton = document.getElementById('add-client-button');
+        const clientModal = document.getElementById('client-modal');
+        const closeModalButton = document.getElementById('close-modal-button');
+        const cancelButton = document.getElementById('cancel-button');
+        const addClientForm = document.getElementById('add-client-form');
+        const clientTypeSelect = document.getElementById('client-type');
+        const cpfCnpjInput = document.getElementById('cpfCnpj');
+        const cpfCnpjLabel = document.getElementById('cpfCnpj-label');
+        const telefoneInput = document.getElementById('telefone');
+
+        let allClients = [];
+
+        const renderTable = (clients) => {
+            clientsTableBody.innerHTML = '';
+            if (clients.length === 0) {
+                clientsTableBody.innerHTML = `<tr><td colspan="4" class="text-center py-4 text-gray-500">Nenhum cliente encontrado.</td></tr>`;
+                return;
+            }
+            clients.forEach(client => {
+                const row = document.createElement('tr');
+                row.className = 'border-b border-gray-700 hover:bg-gray-800';
+                row.innerHTML = `
+                    <td class="py-3 px-6">${client.razaoSocial || ''}</td>
+                    <td class="py-3 px-6">${client.cpfCnpj || ''}</td>
+                    <td class="py-3 px-6">${client.telefone || ''}</td>
+                    <td class="py-3 px-6 text-center">
+                        <button class="view-details-button text-gray-400 hover:text-white" data-id="${client.id}">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z" /><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.022 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" /></svg>
+                        </button>
+                    </td>
+                `;
+                clientsTableBody.appendChild(row);
+            });
+        };
+
+        const filterClients = () => {
+            const nameFilter = searchName.value.toLowerCase();
+            const cpfCnpjFilter = searchCpfCnpj.value.replace(/\D/g, '');
+            const phoneFilter = searchPhone.value.replace(/\D/g, '');
+
+            const filtered = allClients.filter(client => {
+                const clientCpfCnpj = (client.cpfCnpj || '').replace(/\D/g, '');
+                const clientPhone = (client.telefone || '').replace(/\D/g, '');
+
+                return (client.razaoSocial || '').toLowerCase().includes(nameFilter) &&
+                       clientCpfCnpj.includes(cpfCnpjFilter) &&
+                       clientPhone.includes(phoneFilter);
+            });
+            renderTable(filtered);
+        };
+
+        searchName.addEventListener('input', filterClients);
+        searchCpfCnpj.addEventListener('input', filterClients);
+        searchPhone.addEventListener('input', filterClients);
+
+        onSnapshot(collection(db, "clientes"), (snapshot) => {
+            allClients = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            
+            allClients.sort((a, b) => {
+                const nameA = (a.razaoSocial || '').toLowerCase();
+                const nameB = (b.razaoSocial || '').toLowerCase();
+                if (nameA < nameB) return -1;
+                if (nameA > nameB) return 1;
+                return 0;
+            });
+
+            renderTable(allClients);
+        });
+
+        // --- Lógica do Modal de Adicionar Cliente ---
+        const openModal = () => clientModal.classList.remove('hidden');
+        const closeModal = () => {
+            clientModal.classList.add('hidden');
+            addClientForm.reset();
+            cpfCnpjInput.disabled = true;
+            cpfCnpjLabel.textContent = 'CPF / CNPJ';
+            clientTypeSelect.value = "";
+        };
+
+        addClientButton.addEventListener('click', openModal);
+        closeModalButton.addEventListener('click', closeModal);
+        cancelButton.addEventListener('click', closeModal);
+
+        clientTypeSelect.addEventListener('change', (e) => {
+            cpfCnpjInput.value = '';
+            cpfCnpjInput.disabled = false;
+            if (e.target.value === 'fisica') {
+                cpfCnpjLabel.textContent = 'CPF';
+                cpfCnpjInput.placeholder = ' ';
+                cpfCnpjInput.maxLength = 14;
+            } else {
+                cpfCnpjLabel.textContent = 'CNPJ';
+                cpfCnpjInput.placeholder = ' ';
+                cpfCnpjInput.maxLength = 18;
+            }
+        });
+        
+        cpfCnpjInput.addEventListener('input', (e) => {
+            let value = e.target.value.replace(/\D/g, '');
+            if (clientTypeSelect.value === 'fisica') {
+                value = value.replace(/(\d{3})(\d)/, '$1.$2');
+                value = value.replace(/(\d{3})(\d)/, '$1.$2');
+                value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+            } else {
+                value = value.replace(/(\d{2})(\d)/, '$1.$2');
+                value = value.replace(/(\d{3})(\d)/, '$1.$2');
+                value = value.replace(/(\d{3})(\d)/, '$1/$2');
+                value = value.replace(/(\d{4})(\d{1,2})$/, '$1-$2');
+            }
+            e.target.value = value;
+        });
+
+        telefoneInput.addEventListener('input', (e) => {
+            let value = e.target.value.replace(/\D/g, '');
+            value = value.replace(/^(\d{2})(\d)/g, '($1) $2');
+            value = value.replace(/(\d{5})(\d)/, '$1-$2');
+            e.target.value = value;
+        });
+
+        addClientForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const newClient = {
+                tipo: document.getElementById('client-type').value,
+                cpfCnpj: document.getElementById('cpfCnpj').value,
+                razaoSocial: document.getElementById('razaoSocial').value,
+                telefone: document.getElementById('telefone').value,
+                endereco: document.getElementById('endereco').value,
+            };
+            
+            try {
+                const docRef = await addDoc(collection(db, "clientes"), newClient);
+                console.log("Cliente adicionado com ID: ", docRef.id);
+                closeModal();
+            } catch (error) {
+                console.error("Erro ao adicionar cliente: ", error);
+            }
+        });
+
+        // --- Lógica do Modal de Edição ---
+        const editClientModal = document.getElementById('edit-client-modal');
+        const editCloseModalButton = document.getElementById('edit-close-modal-button');
+        const editCancelButton = document.getElementById('edit-cancel-button');
+        const editClientForm = document.getElementById('edit-client-form');
+        const deleteClientButton = document.getElementById('delete-client-button');
+        const deleteConfirmModal = document.getElementById('delete-confirm-modal');
+        const confirmDeleteButton = document.getElementById('confirm-delete-button');
+        const cancelDeleteButton = document.getElementById('cancel-delete-button');
+        const clientNameToDelete = document.getElementById('client-name-to-delete');
+        const editTelefoneInput = document.getElementById('edit-telefone');
+        const editCpfCnpjInput = document.getElementById('edit-cpfCnpj');
+        const editClientTypeSelect = document.getElementById('edit-client-type');
+
+        const openEditModal = (client) => {
+            document.getElementById('edit-client-id').value = client.id;
+            editClientTypeSelect.value = client.tipo;
+            editCpfCnpjInput.value = client.cpfCnpj;
+            document.getElementById('edit-razaoSocial').value = client.razaoSocial;
+            editTelefoneInput.value = client.telefone;
+            document.getElementById('edit-endereco').value = client.endereco;
+            
+            // Atualiza o label do CPF/CNPJ
+            document.getElementById('edit-cpfCnpj-label').textContent = client.tipo === 'fisica' ? 'CPF' : 'CNPJ';
+            
+            editClientModal.classList.remove('hidden');
+        };
+
+        const closeEditModal = () => {
+            editClientModal.classList.add('hidden');
+            editClientForm.reset();
+        };
+
+        clientsTableBody.addEventListener('click', (e) => {
+            const viewButton = e.target.closest('.view-details-button');
+            if (viewButton) {
+                const clientId = viewButton.dataset.id;
+                const clientData = allClients.find(c => c.id === clientId);
+                if (clientData) {
+                    openEditModal(clientData);
+                }
+            }
+        });
+        
+        editCloseModalButton.addEventListener('click', closeEditModal);
+        editCancelButton.addEventListener('click', closeEditModal);
+
+        editClientForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const clientId = document.getElementById('edit-client-id').value;
+            const updatedClient = {
+                tipo: document.getElementById('edit-client-type').value,
+                cpfCnpj: document.getElementById('edit-cpfCnpj').value,
+                razaoSocial: document.getElementById('edit-razaoSocial').value,
+                telefone: document.getElementById('edit-telefone').value,
+                endereco: document.getElementById('edit-endereco').value,
+            };
+
+            try {
+                const clientRef = doc(db, "clientes", clientId);
+                await updateDoc(clientRef, updatedClient);
+                console.log("Cliente atualizado com sucesso!");
+                closeEditModal();
+            } catch (error) {
+                console.error("Erro ao atualizar cliente: ", error);
+            }
+        });
+
+        deleteClientButton.addEventListener('click', () => {
+            const clientName = document.getElementById('edit-razaoSocial').value;
+            clientNameToDelete.textContent = clientName;
+            deleteConfirmModal.classList.remove('hidden');
+        });
+
+        cancelDeleteButton.addEventListener('click', () => {
+            deleteConfirmModal.classList.add('hidden');
+        });
+
+        confirmDeleteButton.addEventListener('click', async () => {
+            const clientId = document.getElementById('edit-client-id').value;
+            try {
+                await deleteDoc(doc(db, "clientes", clientId));
+                console.log("Cliente apagado com sucesso!");
+                closeEditModal();
+                deleteConfirmModal.classList.add('hidden');
+            } catch (error) {
+                console.error("Erro ao apagar cliente: ", error);
+            }
+        });
+        
+        editClientTypeSelect.addEventListener('change', (e) => {
+            editCpfCnpjInput.value = '';
+            if (e.target.value === 'fisica') {
+                document.getElementById('edit-cpfCnpj-label').textContent = 'CPF';
+                editCpfCnpjInput.maxLength = 14;
+            } else {
+                document.getElementById('edit-cpfCnpj-label').textContent = 'CNPJ';
+                editCpfCnpjInput.maxLength = 18;
+            }
+        });
+
+        editCpfCnpjInput.addEventListener('input', (e) => {
+            let value = e.target.value.replace(/\D/g, '');
+            if (document.getElementById('edit-client-type').value === 'fisica') {
+                value = value.replace(/(\d{3})(\d)/, '$1.$2');
+                value = value.replace(/(\d{3})(\d)/, '$1.$2');
+                value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+            } else {
+                value = value.replace(/(\d{2})(\d)/, '$1.$2');
+                value = value.replace(/(\d{3})(\d)/, '$1.$2');
+                value = value.replace(/(\d{3})(\d)/, '$1/$2');
+                value = value.replace(/(\d{4})(\d{1,2})$/, '$1-$2');
+            }
+            e.target.value = value;
+        });
+
+        editTelefoneInput.addEventListener('input', (e) => {
+            let value = e.target.value.replace(/\D/g, '');
+            value = value.replace(/^(\d{2})(\d)/g, '($1) $2');
+            value = value.replace(/(\d{5})(\d)/, '$1-$2');
+            e.target.value = value;
+        });
+
+    </script>
+</body>
+</html>

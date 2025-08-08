@@ -17,7 +17,7 @@
             color: #E0E0E0;
             overflow-x: hidden;
         }
-        .glass-card, .glass-sidebar, .glass-container {
+        .glass-card {
             background: rgba(28, 28, 28, 0.5);
             -webkit-backdrop-filter: blur(12px);
             backdrop-filter: blur(12px);
@@ -29,13 +29,6 @@
         }
         .neon-shadow {
             animation: pulse-red 6s infinite ease-in-out;
-        }
-        @keyframes pulse-icon-red {
-            0%, 100% { filter: drop-shadow(0 0 3px rgba(255, 50, 50, 0.6)); }
-            50% { filter: drop-shadow(0 0 8px rgba(255, 0, 0, 0.9)); }
-        }
-        .neon-icon {
-            animation: pulse-icon-red 4s infinite ease-in-out;
         }
         .shine-effect {
             position: relative;
@@ -55,124 +48,40 @@
         .shine-effect:hover::before {
             left: 150%;
         }
-        ::-webkit-scrollbar {
-            width: 0px;
-            background: transparent;
-        }
-        input:-webkit-autofill,
-        input:-webkit-autofill:hover, 
-        input:-webkit-autofill:focus, 
-        input:-webkit-autofill:active {
-            -webkit-box-shadow: 0 0 0 30px #1C1C1C inset !important;
-            -webkit-text-fill-color: #FFFFFF !important;
-            transition: background-color 5000s ease-in-out 0s;
-        }
-        .form-control {
-            position: relative;
-        }
-        .form-input {
-            background-color: #1C1C1C;
-        }
-        .form-label {
-            position: absolute;
-            top: 0.85rem;
-            left: 0.75rem;
-            color: #9CA3AF;
-            pointer-events: none;
-            transition: all 0.2s ease-out;
-        }
-        .form-input:focus ~ .form-label,
-        .form-input:not(:placeholder-shown) ~ .form-label {
-            transform: translateY(-1.4rem) scale(0.8);
-            color: #F87171;
-            background-color: #1C1C1C;
-            padding: 0 0.25rem;
-        }
     </style>
 </head>
 <body class="min-h-screen">
 
-    <!-- Botão de Menu Hambúrguer para Mobile (começa oculto) -->
-    <button id="hamburger-button" class="fixed top-4 left-4 z-30 p-2 rounded-md bg-gray-800/50 text-white hidden md:hidden">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-        </svg>
-    </button>
-    
-    <!-- Overlay para o menu mobile -->
-    <div id="sidebar-overlay" class="fixed inset-0 bg-black/60 z-10 hidden md:hidden"></div>
-
-    <!-- Barra Lateral (Sidebar) -->
-    <aside id="sidebar" class="glass-sidebar fixed top-0 left-0 h-full z-20 flex flex-col transition-transform duration-300 ease-in-out -translate-x-full w-64 md:w-20 data-[expanded=true]:w-64">
-        <div class="p-4 flex justify-center items-center flex-shrink-0">
-            <button id="home-button" class="p-2 rounded-lg hover:bg-red-800/50 transition-colors">
-                <img src="../assets/images/logo.png" alt="Logo" class="neon-icon h-10 w-10 object-contain" onerror="this.onerror=null; this.src='https://placehold.co/40x40/1C1C1C/FFFFFF?text=L';">
+    <div class="flex flex-col items-center justify-center min-h-screen p-8 pt-24">
+        <div class="absolute top-4 right-4">
+            <button id="logout-button" class="flex items-center p-2 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd" /></svg>
+                Sair
             </button>
         </div>
-        <nav class="flex-grow p-2 space-y-2">
-            <a href="#" class="flex items-center p-3 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors" data-target="cadastro-usuarios-view" data-title="Cadastro de Usuários">
-                <svg xmlns="http://www.w3.org/2000/svg" class="neon-icon h-6 w-6 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" /></svg>
-                <span class="ml-4 whitespace-nowrap opacity-100 md:opacity-0 transition-opacity data-[expanded=true]:opacity-100">Cadastro Usuários</span>
-            </a>
-            <a href="#" class="flex items-center p-3 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors" data-target="clientes-view" data-title="Clientes">
-                <svg xmlns="http://www.w3.org/2000/svg" class="neon-icon h-6 w-6 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-                <span class="ml-4 whitespace-nowrap opacity-100 md:opacity-0 transition-opacity data-[expanded=true]:opacity-100">Clientes</span>
-            </a>
-            <a href="#" class="flex items-center p-3 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors" data-target="orcamentos-view" data-title="Orçamentos">
-                <svg xmlns="http://www.w3.org/2000/svg" class="neon-icon h-6 w-6 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
-                <span class="ml-4 whitespace-nowrap opacity-100 md:opacity-0 transition-opacity data-[expanded=true]:opacity-100">Orçamentos</span>
-            </a>
-        </nav>
-        <div class="p-2 border-t border-gray-700 flex-shrink-0">
-            <button class="logout-button w-full flex items-center p-3 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" class="neon-icon h-6 w-6 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
-                <span class="ml-4 whitespace-nowrap opacity-100 md:opacity-0 transition-opacity data-[expanded=true]:opacity-100">Sair</span>
-            </button>
-            <button id="toggle-sidebar-button" class="w-full hidden md:flex items-center p-3 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" class="neon-icon h-6 w-6 flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5v4m0 0h-4" /></svg>
-                <span class="ml-4 whitespace-nowrap opacity-0 transition-opacity data-[expanded=true]:opacity-100">Expandir</span>
-            </button>
+        <div class="text-center mb-12">
+            <img src="../assets/images/logo.png" alt="Logo da Empresa" class="mx-auto h-40 w-auto mb-4" onerror="this.onerror=null; this.src='https://placehold.co/300x96/121212/FFFFFF?text=Logo';">
+            <h1 class="text-3xl font-bold text-white">Bem-vindo, <span id="user-display-name">...</span>!</h1>
         </div>
-    </aside>
-
-    <!-- Wrapper para todo o conteúdo da página -->
-    <div id="page-content" class="transition-all duration-300 ease-in-out">
-        <!-- Menu Inicial (Cards) -->
-        <div id="initial-menu-view" class="flex flex-col items-center justify-center min-h-screen p-8 pt-24">
-            <div class="absolute top-4 right-4">
-                <button class="logout-button flex items-center p-2 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 3a1 1 0 00-1 1v12a1 1 0 102 0V4a1 1 0 00-1-1zm10.293 9.293a1 1 0 001.414 1.414l3-3a1 1 0 000-1.414l-3-3a1 1 0 10-1.414 1.414L14.586 9H7a1 1 0 100 2h7.586l-1.293 1.293z" clip-rule="evenodd" /></svg>
-                    Sair
-                </button>
-            </div>
-            <div class="text-center mb-12">
-                <img src="../assets/images/logo.png" alt="Logo da Empresa" class="mx-auto h-40 w-auto mb-4" onerror="this.onerror=null; this.src='https://placehold.co/300x96/121212/FFFFFF?text=Logo';">
-                <h1 class="text-3xl font-bold text-white">Bem-vindo, <span id="user-display-name">...</span>!</h1>
-            </div>
-            <div class="w-full max-w-5xl grid grid-cols-1 md:grid-cols-3 gap-8">
-                <button class="menu-card shine-effect glass-card neon-shadow rounded-2xl p-8 text-center flex flex-col items-center justify-center hover:border-red-400/50 transform hover:-translate-y-1" data-target="cadastro-usuarios-view" data-title="Cadastro de Usuários">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mb-4 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" /></svg>
-                    <h2 class="text-xl font-semibold text-white">Cadastro Usuários</h2>
-                </button>
-                <button class="menu-card shine-effect glass-card neon-shadow rounded-2xl p-8 text-center flex flex-col items-center justify-center hover:border-red-400/50 transform hover:-translate-y-1" data-target="clientes-view" data-title="Clientes">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mb-4 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
-                    <h2 class="text-xl font-semibold text-white">Clientes</h2>
-                </button>
-                <button class="menu-card shine-effect glass-card neon-shadow rounded-2xl p-8 text-center flex flex-col items-center justify-center hover:border-red-400/50 transform hover:-translate-y-1" data-target="orcamentos-view" data-title="Orçamentos">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mb-4 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
-                    <h2 class="text-xl font-semibold text-white">Orçamentos</h2>
-                </button>
-            </div>
+        <div class="w-full max-w-5xl grid grid-cols-1 md:grid-cols-3 gap-8">
+            <a href="../pages/usuarios.html" class="menu-card shine-effect glass-card neon-shadow rounded-2xl p-8 text-center flex flex-col items-center justify-center hover:border-red-400/50 transform hover:-translate-y-1">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mb-4 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" /></svg>
+                <h2 class="text-xl font-semibold text-white">Cadastro Usuários</h2>
+            </a>
+            <a href="../pages/clientes.html" class="menu-card shine-effect glass-card neon-shadow rounded-2xl p-8 text-center flex flex-col items-center justify-center hover:border-red-400/50 transform hover:-translate-y-1">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mb-4 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                <h2 class="text-xl font-semibold text-white">Clientes</h2>
+            </a>
+            <a href="../pages/orcamentos.html" class="menu-card shine-effect glass-card neon-shadow rounded-2xl p-8 text-center flex flex-col items-center justify-center hover:border-red-400/50 transform hover:-translate-y-1">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mb-4 text-red-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
+                <h2 class="text-xl font-semibold text-white">Orçamentos</h2>
+            </a>
         </div>
-        
-        <main id="main-content" class="min-h-screen p-8 pt-24 hidden">
-            <!-- O conteúdo das seções será inserido aqui -->
-        </main>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signOut, createUserWithEmailAndPassword, updateProfile } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAWlLRvbcxZQvjzW7KT4A7Ls-iJ0I4BAGI",
@@ -187,18 +96,7 @@
         const auth = getAuth(app);
 
         const userDisplayName = document.getElementById('user-display-name');
-        const sidebar = document.getElementById('sidebar');
-        const mainContent = document.getElementById('main-content');
-        const initialMenuView = document.getElementById('initial-menu-view');
-        const menuCards = document.querySelectorAll('.menu-card');
-        const navLinks = document.querySelectorAll('#sidebar a');
-        const homeButton = document.getElementById('home-button');
-        const toggleSidebarButton = document.getElementById('toggle-sidebar-button');
-        const sidebarSpans = sidebar.querySelectorAll('span');
-        const logoutButtons = document.querySelectorAll('.logout-button');
-        const hamburgerButton = document.getElementById('hamburger-button');
-        const sidebarOverlay = document.getElementById('sidebar-overlay');
-        const pageContent = document.getElementById('page-content');
+        const logoutButton = document.getElementById('logout-button');
 
         // --- Lógica de Autenticação e Logout ---
         onAuthStateChanged(auth, (user) => {
@@ -210,295 +108,14 @@
             }
         });
 
-        logoutButtons.forEach(button => {
-            button.addEventListener('click', async () => {
-                try {
-                    await signOut(auth);
-                    window.location.href = '/index.html';
-                } catch (error) {
-                    console.error("Erro ao fazer logout:", error);
-                }
-            });
-        });
-
-        // --- Lógica de Navegação e UI ---
-        function showView(viewId, viewTitle) {
-            // Esconde todas as vistas
-            initialMenuView.classList.add('hidden');
-            mainContent.classList.add('hidden');
-
-            if (viewId === 'initial-menu-view') {
-                initialMenuView.classList.remove('hidden');
-                sidebar.classList.add('-translate-x-full');
-                hamburgerButton.classList.add('hidden');
-                pageContent.style.marginLeft = '0';
-            } else {
-                mainContent.classList.remove('hidden');
-                const template = document.getElementById(viewId);
-                if (template) {
-                    mainContent.innerHTML = template.innerHTML;
-                    // Re-anexa os listeners de eventos para o formulário de cadastro, se ele for exibido
-                    if (viewId === 'cadastro-usuarios-view') {
-                        attachSignupFormListeners();
-                    }
-                } else {
-                    mainContent.innerHTML = `<h1 class="text-4xl font-bold text-white">${viewTitle}</h1><p class="mt-4 text-gray-300">Conteúdo para ${viewTitle}...</p>`;
-                }
-                
-                sidebar.classList.remove('-translate-x-full');
-                hamburgerButton.classList.remove('hidden');
-                
-                const isMobile = window.innerWidth < 768;
-                if(isMobile) {
-                    sidebar.dataset.expanded = 'true';
-                }
-                
-                pageContent.style.marginLeft = isMobile ? '0' : (sidebar.dataset.expanded === 'true' ? '16rem' : '5rem');
+        logoutButton.addEventListener('click', async () => {
+            try {
+                await signOut(auth);
+                window.location.href = '/index.html';
+            } catch (error) {
+                console.error("Erro ao fazer logout:", error);
             }
-        }
-
-        menuCards.forEach(card => {
-            card.addEventListener('click', () => {
-                showView(card.dataset.target, card.dataset.title);
-            });
         });
-
-        navLinks.forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                showView(link.dataset.target, link.dataset.title);
-                if (window.innerWidth < 768) {
-                    sidebar.classList.add('-translate-x-full');
-                    sidebarOverlay.classList.add('hidden');
-                }
-            });
-        });
-
-        homeButton.addEventListener('click', () => showView('initial-menu-view'));
-
-        toggleSidebarButton.addEventListener('click', () => {
-            const isExpanded = sidebar.dataset.expanded === 'true';
-            sidebar.dataset.expanded = !isExpanded;
-            pageContent.style.marginLeft = (window.innerWidth >= 768) ? (!isExpanded ? '16rem' : '5rem') : '0';
-            sidebarSpans.forEach(span => {
-                span.dataset.expanded = !isExpanded;
-            });
-        });
-
-        hamburgerButton.addEventListener('click', () => {
-            sidebar.classList.remove('-translate-x-full');
-            sidebarOverlay.classList.remove('hidden');
-        });
-
-        sidebarOverlay.addEventListener('click', () => {
-            sidebar.classList.add('-translate-x-full');
-            sidebarOverlay.classList.add('hidden');
-        });
-
-        // --- Lógica do Formulário de Cadastro ---
-        function attachSignupFormListeners() {
-            const signupForm = document.getElementById('signup-form');
-            if (!signupForm) return;
-
-            const successMessage = document.getElementById('signup-success-message');
-            const errorMessage = document.getElementById('signup-error-message');
-            const submitButton = signupForm.querySelector('button[type="submit"]');
-            const buttonText = submitButton.querySelector('.button-text');
-            const buttonSpinner = submitButton.querySelector('.button-spinner');
-            const passwordInput = signupForm.querySelector('#password');
-            const confirmPasswordInput = signupForm.querySelector('#confirm-password');
-            const passwordMatch = document.getElementById('password-match-message');
-
-            const togglePasswordButtons = signupForm.querySelectorAll('.toggle-password');
-            togglePasswordButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    const targetInput = signupForm.querySelector(button.dataset.target);
-                    const type = targetInput.getAttribute('type') === 'password' ? 'text' : 'password';
-                    targetInput.setAttribute('type', type);
-                    button.querySelector('.eye-open').classList.toggle('hidden');
-                    button.querySelector('.eye-closed').classList.toggle('hidden');
-                });
-            });
-
-            const requirements = {
-                length: document.getElementById('req-length'),
-                uppercase: document.getElementById('req-uppercase'),
-                lowercase: document.getElementById('req-lowercase'),
-                number: document.getElementById('req-number'),
-                symbol: document.getElementById('req-symbol'),
-            };
-
-            passwordInput.addEventListener('input', validateFormState);
-            confirmPasswordInput.addEventListener('input', validateFormState);
-
-            function validateFormState() {
-                const password = passwordInput.value;
-                const confirmPassword = confirmPasswordInput.value;
-
-                const checks = {
-                    length: password.length >= 8,
-                    uppercase: /[A-Z]/.test(password),
-                    lowercase: /[a-z]/.test(password),
-                    number: /\d/.test(password),
-                    symbol: /[^a-zA-Z\d]/.test(password)
-                };
-
-                updateRequirement(requirements.length, checks.length);
-                updateRequirement(requirements.uppercase, checks.uppercase);
-                updateRequirement(requirements.lowercase, checks.lowercase);
-                updateRequirement(requirements.number, checks.number);
-                updateRequirement(requirements.symbol, checks.symbol);
-
-                const allStrengthMet = Object.values(checks).every(Boolean);
-                const passwordsMatch = password === confirmPassword && password.length > 0;
-                
-                submitButton.disabled = !(allStrengthMet && passwordsMatch);
-
-                checkPasswordMatchVisuals();
-            }
-
-            function updateRequirement(element, met) {
-                if (met) {
-                    element.classList.remove('text-gray-500');
-                    element.classList.add('text-green-400');
-                    element.querySelector('svg').innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />`;
-                } else {
-                    element.classList.remove('text-green-400');
-                    element.classList.add('text-gray-500');
-                    element.querySelector('svg').innerHTML = `<path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />`;
-                }
-            }
-
-            function checkPasswordMatchVisuals() {
-                const password = passwordInput.value;
-                const confirmPassword = confirmPasswordInput.value;
-                if (confirmPassword.length > 0) {
-                    passwordMatch.classList.remove('hidden');
-                    if (password === confirmPassword) {
-                        passwordMatch.textContent = 'As senhas coincidem';
-                        passwordMatch.classList.remove('text-red-400');
-                        passwordMatch.classList.add('text-green-400');
-                    } else {
-                        passwordMatch.textContent = 'As senhas não coincidem';
-                        passwordMatch.classList.remove('text-green-400');
-                        passwordMatch.classList.add('text-red-400');
-                    }
-                } else {
-                    passwordMatch.classList.add('hidden');
-                }
-            }
-
-            signupForm.addEventListener('submit', async (event) => {
-                event.preventDefault();
-                errorMessage.classList.add('hidden');
-                successMessage.classList.add('hidden');
-                
-                submitButton.disabled = true;
-                buttonText.classList.add('hidden');
-                buttonSpinner.classList.remove('hidden');
-
-                const name = signupForm.querySelector('#name').value;
-                const email = signupForm.querySelector('#email').value;
-                const password = signupForm.querySelector('#password').value;
-
-                try {
-                    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-                    
-                    await updateProfile(userCredential.user, {
-                        displayName: name
-                    });
-
-                    console.log('Usuário criado com sucesso:', userCredential.user);
-                    successMessage.textContent = `Usuário ${name} cadastrado com sucesso!`;
-                    successMessage.classList.remove('hidden');
-                    signupForm.reset();
-                    validateFormState(); // Reseta o estado do botão e dos requisitos
-
-                } catch (error) {
-                    console.error("Erro ao criar usuário:", error.code);
-                    switch (error.code) {
-                        case 'auth/email-already-in-use':
-                            errorMessage.textContent = 'Este email já está em uso.';
-                            break;
-                        case 'auth/weak-password':
-                            errorMessage.textContent = 'A senha deve ter pelo menos 6 caracteres.';
-                            break;
-                        case 'auth/invalid-email':
-                            errorMessage.textContent = 'O formato do email é inválido.';
-                            break;
-                        default:
-                            errorMessage.textContent = 'Ocorreu um erro ao criar o usuário.';
-                    }
-                    errorMessage.classList.remove('hidden');
-                } finally {
-                    submitButton.disabled = false;
-                    buttonText.classList.remove('hidden');
-                    buttonSpinner.classList.add('hidden');
-                }
-            });
-        }
     </script>
-
-    <!-- Templates de Conteúdo -->
-    <template id="cadastro-usuarios-view">
-        <div class="flex justify-center">
-            <div class="w-full max-w-2xl p-8 space-y-8 glass-container neon-shadow rounded-2xl">
-                <div class="text-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="mx-auto h-16 w-16 mb-4 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" /></svg>
-                    <h2 class="text-3xl font-bold text-white">Cadastro de Usuários</h2>
-                </div>
-                <form id="signup-form" class="mt-8 space-y-6">
-                    <div class="grid grid-cols-1 gap-6">
-                        <div class="form-control"><input id="name" type="text" required class="form-input appearance-none rounded-md relative block w-full px-3 py-3 border border-gray-600 placeholder-transparent text-white focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm" placeholder="Primeiro Nome"><label for="name" class="form-label">Primeiro Nome</label></div>
-                        <div class="form-control"><input id="email" type="email" autocomplete="email" required class="form-input appearance-none rounded-md relative block w-full px-3 py-3 border border-gray-600 placeholder-transparent text-white focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm" placeholder="Email"><label for="email" class="form-label">Email</label></div>
-                        <div>
-                            <div class="form-control relative">
-                                <input id="password" type="password" autocomplete="new-password" required class="form-input appearance-none rounded-md relative block w-full pl-3 pr-12 py-3 border border-gray-600 placeholder-transparent text-white focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm" placeholder="Senha">
-                                <label for="password" class="form-label">Senha</label>
-                                <button type="button" class="toggle-password absolute inset-y-0 right-0 z-20 px-3 flex items-center text-gray-400 hover:text-white" data-target="#password">
-                                    <svg class="eye-open h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z" /><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.022 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" /></svg>
-                                    <svg class="eye-closed h-5 w-5 hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3.707 2.293a1 1 0 00-1.414 1.414l14 14a1 1 0 001.414-1.414l-1.473-1.473A10.014 10.014 0 0019.542 10C18.268 5.943 14.478 3 10 3a9.958 9.958 0 00-4.512 1.074L3.707 2.293zM10 12a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" /><path d="M2 10s3.939 7 8 7 8-7 8-7-3.939-7-8-7-8 7-8 7zm7.999-4a4 4 0 100 8 4 4 0 000-8z" /></svg>
-                                </button>
-                            </div>
-                            <div class="mt-2 text-xs space-y-1">
-                                <div id="req-length" class="flex items-center text-gray-500 transition-colors"><svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>Pelo menos 8 caracteres</div>
-                                <div id="req-uppercase" class="flex items-center text-gray-500 transition-colors"><svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>Uma letra maiúscula</div>
-                                <div id="req-lowercase" class="flex items-center text-gray-500 transition-colors"><svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>Uma letra minúscula</div>
-                                <div id="req-number" class="flex items-center text-gray-500 transition-colors"><svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>Um número</div>
-                                <div id="req-symbol" class="flex items-center text-gray-500 transition-colors"><svg class="w-4 h-4 mr-2" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>Um símbolo (@, !, etc)</div>
-                            </div>
-                        </div>
-                        <div>
-                            <div class="form-control relative">
-                                <input id="confirm-password" type="password" autocomplete="new-password" required class="form-input appearance-none rounded-md relative block w-full pl-3 pr-12 py-3 border border-gray-600 placeholder-transparent text-white focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm" placeholder="Confirmar Senha">
-                                <label for="confirm-password" class="form-label">Confirmar Senha</label>
-                                <button type="button" class="toggle-password absolute inset-y-0 right-0 z-20 px-3 flex items-center text-gray-400 hover:text-white" data-target="#confirm-password">
-                                    <svg class="eye-open h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z" /><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.022 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" /></svg>
-                                    <svg class="eye-closed h-5 w-5 hidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3.707 2.293a1 1 0 00-1.414 1.414l14 14a1 1 0 001.414-1.414l-1.473-1.473A10.014 10.014 0 0019.542 10C18.268 5.943 14.478 3 10 3a9.958 9.958 0 00-4.512 1.074L3.707 2.293zM10 12a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd" /><path d="M2 10s3.939 7 8 7 8-7 8-7-3.939-7-8-7-8 7-8 7zm7.999-4a4 4 0 100 8 4 4 0 000-8z" /></svg>
-                                </button>
-                            </div>
-                            <div id="password-match-message" class="text-sm text-center mt-2 h-4"></div>
-                        </div>
-                    </div>
-                    <div>
-                        <button type="submit" class="shine-effect group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-red-800 bg-opacity-80 hover:bg-red-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 focus:ring-offset-gray-800 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
-                            <span class="button-text">Cadastrar</span>
-                            <svg class="animate-spin h-5 w-5 text-white hidden button-spinner" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                        </button>
-                    </div>
-                    <div id="signup-success-message" class="text-center text-green-400 text-sm font-medium hidden pt-2"></div>
-                    <div id="signup-error-message" class="text-center text-red-400 text-sm font-medium hidden pt-2"></div>
-                </form>
-            </div>
-        </div>
-    </template>
-    <template id="clientes-view">
-        <h1 class="text-4xl font-bold text-white">Clientes</h1>
-        <p class="mt-4 text-gray-300">Conteúdo da página de clientes...</p>
-    </template>
-    <template id="orcamentos-view">
-        <h1 class="text-4xl font-bold text-white">Orçamentos</h1>
-        <p class="mt-4 text-gray-300">Conteúdo da página de orçamentos...</p>
-    </template>
 </body>
 </html>
