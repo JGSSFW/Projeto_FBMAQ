@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Criar Orçamento</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #121212;
+            color: #E0E0E0;
+        }
+        .glass-container {
+            background: rgba(28, 28, 28, 0.6);
+            -webkit-backdrop-filter: blur(12px);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        @keyframes pulse-red {
+            0%, 100% { box-shadow: 0 0 10px rgba(255, 50, 50, 0.4), 0 0 15px rgba(255, 50, 50, 0.3); }
+            50% { box-shadow: 0 0 25px rgba(255, 0, 0, 0.8), 0 0 40px rgba(255, 0, 0, 0.6); }
+        }
+        .neon-shadow {
+            animation: pulse-red 6s infinite ease-in-out;
+        }
+        .form-input, .form-select {
+            background-color: #1C1C1C;
+        }
+        .form-control {
+            position: relative;
+        }
+        .form-label {
+            position: absolute;
+            top: 0.85rem;
+            left: 0.75rem;
+            color: #9CA3AF;
+            pointer-events: none;
+            transition: all 0.2s ease-out;
+        }
+        .form-input:focus ~ .form-label,
+        .form-input:not(:placeholder-shown) ~ .form-label,
+        .form-select:focus ~ .form-label,
+        .form-select:not([value=""]) ~ .form-label {
+            transform: translateY(-1.4rem) scale(0.8);
+            color: #F87171;
+            background-color: #1C1C1C;
+            padding: 0 0.25rem;
+        }
+        /* Correção para o fundo do autofill do navegador */
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover, 
+        input:-webkit-autofill:focus, 
+        input:-webkit-autofill:active {
+            -webkit-box-shadow: 0 0 0 30px #1C1C1C inset !important;
+            -webkit-text-fill-color: #FFFFFF !important;
+            transition: background-color 5000s ease-in-out 0s;
+        }
+    </style>
+</head>
+<body class="min-h-screen p-8">
+
+    <div class="w-full max-w-4xl mx-auto">
+        <div class="flex justify-between items-center mb-8">
+            <h1 class="text-4xl font-bold text-white">Criar Orçamento</h1>
+            <a href="./orcamentos.html" class="flex items-center p-2 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+                </svg>
+                Voltar
+            </a>
+        </div>
+
+        <div class="glass-container neon-shadow rounded-2xl p-8">
+            <form id="orcamento-form" class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="form-control md:col-span-1">
+                        <input id="os-number" type="text" class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white" placeholder=" " disabled>
+                        <label for="os-number" class="form-label">OS</label>
+                    </div>
+                    <div class="form-control md:col-span-2 relative">
+                        <input id="cliente-nome" type="text" autocomplete="off" class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
+                        <label for="cliente-nome" class="form-label">Cliente</label>
+                        <div id="cliente-suggestions" class="absolute z-10 w-full bg-[#2D2D2D] border border-gray-600 rounded-md mt-1 hidden max-h-40 overflow-y-auto"></div>
+                    </div>
+                </div>
+                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="form-control">
+                        <input id="cliente-cpfCnpj" type="text" class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
+                        <label id="cliente-cpfCnpj-label" for="cliente-cpfCnpj" class="form-label">CPF/CNPJ</label>
+                    </div>
+                    <div class="form-control">
+                        <input id="endereco" type="text" class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
+                        <label for="endereco" class="form-label">Endereço</label>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="form-control">
+                        <input id="data" type="date" class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
+                        <label for="data" class="form-label">Data</label>
+                    </div>
+                    <div class="form-control">
+                        <input id="cuidados" type="text" class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white" placeholder=" " disabled>
+                        <label for="cuidados" class="form-label">Aos cuidados de</label>
+                    </div>
+                    <div class="form-control">
+                        <input id="telefone" type="text" class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
+                        <label for="telefone" class="form-label">Telefone</label>
+                    </div>
+                </div>
+                 <div class="form-control">
+                    <input id="email" type="email" class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
+                    <label for="email" class="form-label">Email</label>
+                </div>
+                <div class="form-control">
+                    <textarea id="descricao" rows="4" class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" "></textarea>
+                    <label for="descricao" class="form-label">Descrição dos Serviços</label>
+                </div>
+                <div class="flex justify-end">
+                    <button type="submit" class="py-2 px-6 rounded-md text-white bg-red-800 hover:bg-red-900">Salvar Orçamento</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAWlLRvbcxZQvjzW7KT4A7Ls-iJ0I4BAGI",
+            authDomain: "fb-maq.firebaseapp.com",
+            projectId: "fb-maq",
+            storageBucket: "fb-maq.firebasestorage.app",
+            messagingSenderId: "782633097930",
+            appId: "1:782633097930:web:281c9ac26470939449b233"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let allClients = [];
+        const clienteNomeInput = document.getElementById('cliente-nome');
+        const clienteSuggestions = document.getElementById('cliente-suggestions');
+        const clienteCpfCnpjInput = document.getElementById('cliente-cpfCnpj');
+        const clienteCpfCnpjLabel = document.getElementById('cliente-cpfCnpj-label');
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                // Preenche o campo "Aos cuidados de"
+                document.getElementById('cuidados').value = user.displayName || user.email;
+                
+                // Busca o próximo número de OS
+                const orcamentosRef = collection(db, "orcamentos");
+                const q = query(orcamentosRef, orderBy("os", "desc"), limit(1));
+                const querySnapshot = await getDocs(q);
+                let nextOs = 1;
+                if (!querySnapshot.empty) {
+                    const lastOs = querySnapshot.docs[0].data().os;
+                    nextOs = parseInt(lastOs) + 1;
+                }
+                document.getElementById('os-number').value = String(nextOs).padStart(4, '0');
+
+                // Carrega os clientes para a busca
+                const clientesSnapshot = await getDocs(collection(db, "clientes"));
+                allClients = [];
+                clientesSnapshot.forEach((doc) => {
+                    allClients.push(doc.data());
+                });
+
+            } else {
+                window.location.href = '/index.html';
+            }
+        });
+        
+        // Lógica para preencher campos ao selecionar um cliente
+        clienteNomeInput.addEventListener('input', (e) => {
+            const inputValue = e.target.value.toLowerCase();
+            clienteSuggestions.innerHTML = '';
+            
+            if (inputValue.length === 0) {
+                clienteSuggestions.classList.add('hidden');
+                return;
+            }
+
+            const filteredClients = allClients.filter(client => 
+                (client.razaoSocial || '').toLowerCase().includes(inputValue)
+            );
+
+            if (filteredClients.length > 0) {
+                filteredClients.forEach(client => {
+                    const suggestionDiv = document.createElement('div');
+                    suggestionDiv.textContent = client.razaoSocial;
+                    suggestionDiv.className = 'p-2 hover:bg-gray-700 cursor-pointer';
+                    suggestionDiv.onclick = () => {
+                        clienteNomeInput.value = client.razaoSocial;
+                        document.getElementById('endereco').value = client.endereco || '';
+                        document.getElementById('telefone').value = client.telefone || '';
+                        document.getElementById('email').value = client.email || '';
+                        clienteCpfCnpjInput.value = client.cpfCnpj || '';
+                        clienteCpfCnpjLabel.textContent = client.tipo === 'fisica' ? 'CPF' : 'CNPJ';
+                        clienteSuggestions.classList.add('hidden');
+                    };
+                    clienteSuggestions.appendChild(suggestionDiv);
+                });
+                clienteSuggestions.classList.remove('hidden');
+            } else {
+                clienteSuggestions.classList.add('hidden');
+            }
+        });
+
+        // Esconde as sugestões se clicar fora
+        document.addEventListener('click', (e) => {
+            if (e.target !== clienteNomeInput) {
+                clienteSuggestions.classList.add('hidden');
+            }
+        });
+
+        // Lógica do formulário de orçamento
+        const orcamentoForm = document.getElementById('orcamento-form');
+
+        orcamentoForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const novoOrcamento = {
+                os: document.getElementById('os-number').value,
+                clienteNome: document.getElementById('cliente-nome').value,
+                clienteCpfCnpj: document.getElementById('cliente-cpfCnpj').value,
+                endereco: document.getElementById('endereco').value,
+                data: document.getElementById('data').value,
+                aosCuidadosDe: document.getElementById('cuidados').value,
+                telefone: document.getElementById('telefone').value,
+                email: document.getElementById('email').value,
+                descricao: document.getElementById('descricao').value,
+                status: 'Pendente',
+                valorTotal: 0 
+            };
+
+            try {
+                const docRef = await addDoc(collection(db, "orcamentos"), novoOrcamento);
+                console.log("Orçamento salvo com ID: ", docRef.id);
+                orcamentoForm.reset();
+                window.location.href = './orcamentos.html';
+            } catch (error) {
+                console.error("Erro ao salvar orçamento: ", error);
+                alert("Ocorreu um erro ao salvar o orçamento. Tente novamente.");
+            }
+        });
+
+    </script>
+</body>
+</html>
