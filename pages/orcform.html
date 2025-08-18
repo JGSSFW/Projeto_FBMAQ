@@ -78,6 +78,9 @@
 
         <div class="glass-container neon-shadow rounded-2xl p-8">
             <form id="orcamento-form" class="space-y-6">
+                
+                <h2 class="text-2xl font-semibold text-white border-b border-gray-700 pb-2">Cliente</h2>
+                
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div class="form-control md:col-span-1">
                         <input id="os-number" type="text" class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white" placeholder=" " disabled>
@@ -117,10 +120,92 @@
                     <input id="email" type="email" class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
                     <label for="email" class="form-label">Email</label>
                 </div>
-                <div class="form-control">
-                    <textarea id="descricao" rows="4" class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" "></textarea>
-                    <label for="descricao" class="form-label">Descrição dos Serviços</label>
+
+                <h2 class="text-2xl font-semibold text-white border-b border-gray-700 pb-2 pt-4">Objeto da Proposta</h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="form-control">
+                        <input id="objeto-proposta" type="text" class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
+                        <label for="objeto-proposta" class="form-label">Objeto da proposta</label>
+                    </div>
+                    <div class="form-control">
+                        <input id="modelo" type="text" class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
+                        <label for="modelo" class="form-label">Modelo</label>
+                    </div>
                 </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="form-control">
+                        <input id="serie" type="text" class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
+                        <label for="serie" class="form-label">Série</label>
+                    </div>
+                    <div class="form-control">
+                        <input id="horimetro" type="text" class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
+                        <label for="horimetro" class="form-label">Horímetro</label>
+                    </div>
+                    <div class="form-control">
+                        <input id="id-equipamento" type="text" class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
+                        <label for="id-equipamento" class="form-label">ID do equipamento</label>
+                    </div>
+                </div>
+                <div class="form-control">
+                    <select id="garantia" class="form-select w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500">
+                        <option value="" disabled selected>Selecione uma opção</option>
+                        <option value="sim">Sim</option>
+                        <option value="nao">Não</option>
+                    </select>
+                    <label for="garantia" class="form-label">Equipamento na garantia</label>
+                </div>
+                
+                <div id="servicos-container">
+                    <!-- Bloco de Serviço Original -->
+                    <div class="servico-block">
+                        <h2 class="text-2xl font-semibold text-white border-b border-gray-700 pb-2 pt-4">Serviços a Executar</h2>
+                        
+                        <div class="form-control mt-6">
+                            <input id="frota-equipamento" type="text" class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
+                            <label for="frota-equipamento" class="form-label">Frota do equipamento</label>
+                        </div>
+
+                        <div class="form-control mt-6">
+                            <textarea id="descricao" rows="4" class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" "></textarea>
+                            <label for="descricao" class="form-label">Descrição do problema</label>
+                        </div>
+                        
+                        <h3 class="text-xl font-semibold text-white pt-6">Valores</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-5 gap-6 mt-4">
+                            <div class="form-control">
+                                <input id="valor-pecas" type="text" class="valor-input form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
+                                <label for="valor-pecas" class="form-label">Peças</label>
+                            </div>
+                            <div class="form-control">
+                                <input id="valor-recuperacoes" type="text" class="valor-input form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
+                                <label for="valor-recuperacoes" class="form-label">Recuperações</label>
+                            </div>
+                            <div class="form-control">
+                                <input id="valor-servicos" type="text" class="valor-input form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
+                                <label for="valor-servicos" class="form-label">Serviços</label>
+                            </div>
+                            <div class="form-control">
+                                <input id="valor-mao-obra" type="text" class="valor-input form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
+                                <label for="valor-mao-obra" class="form-label">Mão de obra</label>
+                            </div>
+                            <div class="form-control">
+                                <input id="valor-total" type="text" class="valor-total form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white" placeholder=" " disabled>
+                                <label for="valor-total" class="form-label">Total</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="additional-services-container"></div>
+                
+                <div class="pt-4">
+                    <button type="button" id="add-servico-button" class="w-full flex justify-center items-center py-2 px-4 border border-dashed border-gray-600 text-sm font-medium rounded-md text-gray-400 hover:text-white hover:border-white transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" /></svg>
+                        Adicionar Serviço
+                    </button>
+                </div>
+
                 <div class="flex justify-end">
                     <button type="submit" class="py-2 px-6 rounded-md text-white bg-red-800 hover:bg-red-900">Salvar Orçamento</button>
                 </div>
@@ -151,6 +236,7 @@
         const clienteSuggestions = document.getElementById('cliente-suggestions');
         const clienteCpfCnpjInput = document.getElementById('cliente-cpfCnpj');
         const clienteCpfCnpjLabel = document.getElementById('cliente-cpfCnpj-label');
+        const orcamentoForm = document.getElementById('orcamento-form');
 
         onAuthStateChanged(auth, async (user) => {
             if (user) {
@@ -224,8 +310,6 @@
         });
 
         // Lógica do formulário de orçamento
-        const orcamentoForm = document.getElementById('orcamento-form');
-
         orcamentoForm.addEventListener('submit', async (e) => {
             e.preventDefault();
 
@@ -238,9 +322,20 @@
                 aosCuidadosDe: document.getElementById('cuidados').value,
                 telefone: document.getElementById('telefone').value,
                 email: document.getElementById('email').value,
+                objetoProposta: document.getElementById('objeto-proposta').value,
+                modelo: document.getElementById('modelo').value,
+                serie: document.getElementById('serie').value,
+                horimetro: document.getElementById('horimetro').value,
+                idEquipamento: document.getElementById('id-equipamento').value,
+                garantia: document.getElementById('garantia').value,
                 descricao: document.getElementById('descricao').value,
-                status: 'Pendente',
-                valorTotal: 0 
+                frotaEquipamento: document.getElementById('frota-equipamento').value,
+                valorPecas: parseCurrency(document.getElementById('valor-pecas').value),
+                valorRecuperacoes: parseCurrency(document.getElementById('valor-recuperacoes').value),
+                valorServicos: parseCurrency(document.getElementById('valor-servicos').value),
+                valorMaoObra: parseCurrency(document.getElementById('valor-mao-obra').value),
+                valorTotal: parseCurrency(document.getElementById('valor-total').value),
+                status: 'Pendente'
             };
 
             try {
@@ -252,6 +347,105 @@
                 console.error("Erro ao salvar orçamento: ", error);
                 alert("Ocorreu um erro ao salvar o orçamento. Tente novamente.");
             }
+        });
+
+        // --- Lógica de Cálculo de Valores ---
+        const formatAsCurrency = (value) => {
+            if (!value) return '';
+            let num = value.toString().replace(/\D/g, '');
+            if (num === '') return '';
+            num = parseFloat(num) / 100;
+            return num.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        };
+
+        const parseCurrency = (value) => {
+            if (!value) return 0;
+            const num = parseFloat(value.replace(/[R$\s.]/g, '').replace(',', '.'));
+            return isNaN(num) ? 0 : num;
+        };
+
+        const calculateTotal = (block) => {
+            let total = 0;
+            const inputs = block.querySelectorAll('.valor-input');
+            inputs.forEach(input => {
+                total += parseCurrency(input.value);
+            });
+            block.querySelector('.valor-total').value = formatAsCurrency(total.toFixed(2));
+        };
+
+        const addValueInputListeners = (container) => {
+            const inputs = container.querySelectorAll('.valor-input');
+            inputs.forEach(input => {
+                input.addEventListener('input', (e) => {
+                    const block = e.target.closest('.servico-block');
+                    e.target.value = formatAsCurrency(e.target.value);
+                    calculateTotal(block);
+                });
+            });
+        };
+
+        addValueInputListeners(document.getElementById('servicos-container'));
+
+        // --- Lógica de Adicionar Serviço ---
+        const addServicoButton = document.getElementById('add-servico-button');
+        const additionalServicesContainer = document.getElementById('additional-services-container');
+        let servicoCounter = 1;
+
+        addServicoButton.addEventListener('click', () => {
+            servicoCounter++;
+            const newServiceBlock = document.createElement('div');
+            newServiceBlock.className = 'servico-block mt-6';
+            newServiceBlock.innerHTML = `
+                <div class="border-t border-gray-700 my-6"></div>
+                <div class="flex justify-between items-center border-b border-gray-700 pb-2 pt-4">
+                    <h2 class="text-2xl font-semibold text-white">Serviços a Executar #${servicoCounter}</h2>
+                    <button type="button" class="remove-servico-button text-gray-400 hover:text-red-500 transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </button>
+                </div>
+                
+                <div class="form-control mt-6">
+                    <input id="frota-equipamento-${servicoCounter}" type="text" class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
+                    <label for="frota-equipamento-${servicoCounter}" class="form-label">Frota do equipamento</label>
+                </div>
+
+                <div class="form-control mt-6">
+                    <textarea id="descricao-${servicoCounter}" rows="4" class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" "></textarea>
+                    <label for="descricao-${servicoCounter}" class="form-label">Descrição do problema</label>
+                </div>
+                
+                <h3 class="text-xl font-semibold text-white pt-6">Valores</h3>
+                <div class="grid grid-cols-1 md:grid-cols-5 gap-6 mt-4">
+                    <div class="form-control">
+                        <input id="valor-pecas-${servicoCounter}" type="text" class="valor-input form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
+                        <label for="valor-pecas-${servicoCounter}" class="form-label">Peças</label>
+                    </div>
+                    <div class="form-control">
+                        <input id="valor-recuperacoes-${servicoCounter}" type="text" class="valor-input form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
+                        <label for="valor-recuperacoes-${servicoCounter}" class="form-label">Recuperações</label>
+                    </div>
+                    <div class="form-control">
+                        <input id="valor-servicos-${servicoCounter}" type="text" class="valor-input form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
+                        <label for="valor-servicos-${servicoCounter}" class="form-label">Serviços</label>
+                    </div>
+                    <div class="form-control">
+                        <input id="valor-mao-obra-${servicoCounter}" type="text" class="valor-input form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
+                        <label for="valor-mao-obra-${servicoCounter}" class="form-label">Mão de obra</label>
+                    </div>
+                    <div class="form-control">
+                        <input id="valor-total-${servicoCounter}" type="text" class="valor-total form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white" placeholder=" " disabled>
+                        <label for="valor-total-${servicoCounter}" class="form-label">Total</label>
+                    </div>
+                </div>
+            `;
+            additionalServicesContainer.appendChild(newServiceBlock);
+            addValueInputListeners(newServiceBlock);
+            
+            newServiceBlock.querySelector('.remove-servico-button').addEventListener('click', () => {
+                newServiceBlock.remove();
+            });
         });
 
     </script>
