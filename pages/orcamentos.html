@@ -34,7 +34,7 @@
         <div class="flex flex-col md:flex-row justify-between items-center mb-8">
             <h1 class="text-4xl font-bold text-white mb-4 md:mb-0">Histórico de Orçamentos</h1>
             <div class="flex items-center gap-4">
-                 <a href="../pages/menu.html" class="text-gray-300 hover:text-white transition-colors">Voltar</a>
+                 <a href="../menu.html" class="text-gray-300 hover:text-white transition-colors">Voltar</a>
                 <a href="./orcform.html" id="add-orcamento-button" class="w-full md:w-auto flex justify-center items-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-red-800 hover:bg-red-900">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" /></svg>
                     Criar Novo Orçamento
@@ -45,20 +45,20 @@
         <div class="glass-container rounded-2xl p-6">
             <!-- Filtros de Pesquisa -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <input id="search-os" type="text" placeholder="Pesquisar por OS..." class="form-input w-full px-3 py-2 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500">
                 <input id="search-cliente" type="text" placeholder="Pesquisar por Cliente..." class="form-input w-full px-3 py-2 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500">
-                <input id="search-data" type="text" placeholder="Pesquisar por Data..." class="form-input w-full px-3 py-2 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500">
-                <input id="search-status" type="text" placeholder="Pesquisar por Status..." class="form-input w-full px-3 py-2 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500">
+                <input id="search-valor" type="text" placeholder="Pesquisar por Valor..." class="form-input w-full px-3 py-2 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500">
             </div>
 
             <!-- Tabela de Orçamentos -->
-            <div class="overflow-x-auto">
+            <div>
                 <table class="w-full text-sm text-left text-gray-300">
                     <thead class="text-xs text-gray-400 uppercase bg-gray-700/30">
                         <tr>
+                            <th scope="col" class="py-3 px-6">OS</th>
                             <th scope="col" class="py-3 px-6">Cliente</th>
                             <th scope="col" class="py-3 px-6">Data</th>
-                            <th scope="col" class="py-3 px-6">Valor Total</th>
-                            <th scope="col" class="py-3 px-6">Status</th>
+                            <th scope="col" class="py-3 px-6">Valor</th>
                             <th scope="col" class="py-3 px-6 text-center">Ações</th>
                         </tr>
                     </thead>
@@ -80,10 +80,22 @@
         </div>
     </div>
 
+    <!-- Modal de Confirmação de Exclusão -->
+    <div id="delete-confirm-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/70 hidden">
+        <div class="glass-modal w-full max-w-md p-8 space-y-6 rounded-2xl text-center">
+            <h2 class="text-2xl font-bold text-white">Confirmar Exclusão</h2>
+            <p class="text-gray-300">Tem a certeza que deseja apagar o orçamento <strong id="orcamento-info-to-delete"></strong>? Esta ação não pode ser desfeita.</p>
+            <div class="flex justify-center gap-4 pt-4">
+                <button type="button" id="confirm-delete-button" class="py-2 px-4 rounded-md text-white bg-red-800 hover:bg-red-900">Confirmar Exclusão</button>
+                <button type="button" id="cancel-delete-button" class="py-2 px-4 rounded-md text-gray-300 hover:bg-gray-700">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, collection, onSnapshot, query, orderBy, doc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAWlLRvbcxZQvjzW7KT4A7Ls-iJ0I4BAGI",
@@ -106,7 +118,16 @@
 
         // --- Lógica da Página de Orçamentos ---
         const orcamentosTableBody = document.getElementById('orcamentos-table-body');
+        const searchOs = document.getElementById('search-os');
+        const searchCliente = document.getElementById('search-cliente');
+        const searchValor = document.getElementById('search-valor');
+
         let allOrcamentos = [];
+
+        const formatAsCurrency = (value) => {
+            if (typeof value !== 'number') return 'R$ 0,00';
+            return value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        };
 
         const renderTable = (orcamentos) => {
             orcamentosTableBody.innerHTML = '';
@@ -118,23 +139,110 @@
                 const row = document.createElement('tr');
                 row.className = 'border-b border-gray-700 hover:bg-gray-800';
                 row.innerHTML = `
+                    <td class="py-3 px-6">${orcamento.os || 'N/A'}</td>
                     <td class="py-3 px-6">${orcamento.clienteNome || 'N/A'}</td>
-                    <td class="py-3 px-6">${orcamento.data || 'N/A'}</td>
-                    <td class="py-3 px-6">R$ ${orcamento.valorTotal || 0}</td>
-                    <td class="py-3 px-6">${orcamento.status || 'N/A'}</td>
+                    <td class="py-3 px-6">${orcamento.data ? new Date(orcamento.data).toLocaleDateString('pt-BR') : 'N/A'}</td>
+                    <td class="py-3 px-6">${formatAsCurrency(orcamento.valorFaturamento)}</td>
                     <td class="py-3 px-6 text-center">
-                        <button class="text-gray-400 hover:text-white" data-id="${orcamento.id}">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"><path d="M10 12a2 2 0 100-4 2 2 0 000 4z" /><path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.022 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" /></svg>
-                        </button>
+                        <div class="relative inline-block">
+                            <button class="actions-button text-gray-400 hover:text-white" data-id="${orcamento.id}">
+                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                    <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z" />
+                                </svg>
+                            </button>
+                            <div class="actions-dropdown absolute right-full mr-2 bottom-0 w-48 bg-gray-800 rounded-md shadow-lg z-20 hidden">
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">Baixar PDF</a>
+                                <a href="./orcform.html?id=${orcamento.id}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">Editar</a>
+                                <a href="#" class="delete-orcamento-link block px-4 py-2 text-sm text-red-500 hover:bg-gray-700" data-id="${orcamento.id}" data-os="${orcamento.os}" data-cliente="${orcamento.clienteNome}">Apagar</a>
+                            </div>
+                        </div>
                     </td>
                 `;
                 orcamentosTableBody.appendChild(row);
             });
         };
 
-        onSnapshot(collection(db, "orcamentos"), (snapshot) => {
+        const filterOrcamentos = () => {
+            const osFilter = searchOs.value.toLowerCase();
+            const clienteFilter = searchCliente.value.toLowerCase();
+            const valorFilter = searchValor.value.replace(/\D/g, '');
+
+            const filtered = allOrcamentos.filter(orcamento => {
+                const valorOrcamento = (orcamento.valorFaturamento || 0).toString().replace(/\D/g, '');
+
+                return (orcamento.os || '').toLowerCase().includes(osFilter) &&
+                       (orcamento.clienteNome || '').toLowerCase().includes(clienteFilter) &&
+                       valorOrcamento.includes(valorFilter);
+            });
+            renderTable(filtered);
+        };
+
+        searchOs.addEventListener('input', filterOrcamentos);
+        searchCliente.addEventListener('input', filterOrcamentos);
+        searchValor.addEventListener('input', filterOrcamentos);
+
+        const q = query(collection(db, "orcamentos"), orderBy("os"));
+        onSnapshot(q, (snapshot) => {
             allOrcamentos = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
             renderTable(allOrcamentos);
+        });
+
+        // --- Lógica do Modal de Exclusão ---
+        const deleteConfirmModal = document.getElementById('delete-confirm-modal');
+        const confirmDeleteButton = document.getElementById('confirm-delete-button');
+        const cancelDeleteButton = document.getElementById('cancel-delete-button');
+        const orcamentoInfoToDelete = document.getElementById('orcamento-info-to-delete');
+        let orcamentoIdToDelete = null;
+
+        orcamentosTableBody.addEventListener('click', (e) => {
+            const actionsButton = e.target.closest('.actions-button');
+            const deleteLink = e.target.closest('.delete-orcamento-link');
+
+            if (actionsButton) {
+                document.querySelectorAll('.actions-dropdown').forEach(dropdown => {
+                    if (dropdown !== actionsButton.nextElementSibling) {
+                        dropdown.classList.add('hidden');
+                    }
+                });
+                actionsButton.nextElementSibling.classList.toggle('hidden');
+            }
+
+            if (deleteLink) {
+                e.preventDefault();
+                orcamentoIdToDelete = deleteLink.dataset.id;
+                const os = deleteLink.dataset.os;
+                const cliente = deleteLink.dataset.cliente;
+                orcamentoInfoToDelete.textContent = `OS #${os} do cliente ${cliente}`;
+                deleteConfirmModal.classList.remove('hidden');
+            }
+        });
+
+        cancelDeleteButton.addEventListener('click', () => {
+            deleteConfirmModal.classList.add('hidden');
+            orcamentoIdToDelete = null;
+        });
+
+        confirmDeleteButton.addEventListener('click', async () => {
+            if (orcamentoIdToDelete) {
+                try {
+                    await deleteDoc(doc(db, "orcamentos", orcamentoIdToDelete));
+                    console.log("Orçamento apagado com sucesso!");
+                    deleteConfirmModal.classList.add('hidden');
+                    orcamentoIdToDelete = null;
+                } catch (error) {
+                    console.error("Erro ao apagar orçamento: ", error);
+                    alert("Ocorreu um erro ao apagar o orçamento.");
+                }
+            }
+        });
+
+        // Fecha os menus se clicar em qualquer outro lugar
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.actions-button')) {
+                document.querySelectorAll('.actions-dropdown').forEach(dropdown => {
+                    dropdown.classList.add('hidden');
+                });
+            }
         });
 
     </script>

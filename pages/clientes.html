@@ -83,7 +83,7 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="form-control">
                         <select id="client-type" class="form-select w-full px-3 py-3 rounded-md border border-gray-600 focus:outline-none focus:ring-red-500 focus:border-red-500" required>
-                            <option value="" disabled selected>Selecione uma opção</option>
+                            <option value="" disabled selected></option>
                             <option value="fisica">Pessoa Física</option>
                             <option value="juridica">Pessoa Jurídica</option>
                         </select>
@@ -97,6 +97,10 @@
                 <div class="form-control">
                     <input id="razaoSocial" type="text" required class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
                     <label for="razaoSocial" class="form-label">Razão Social / Nome</label>
+                </div>
+                 <div class="form-control">
+                    <input id="email" type="email" class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
+                    <label for="email" class="form-label">Email</label>
                 </div>
                 <div class="form-control">
                     <input id="telefone" type="text" required class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" " maxlength="15">
@@ -147,17 +151,7 @@
                         </tr>
                     </thead>
                     <tbody id="clients-table-body">
-                        <tr>
-                            <td colspan="4" class="text-center py-8">
-                                <div class="flex justify-center items-center">
-                                    <svg class="animate-spin h-8 w-8 text-red-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                                    </svg>
-                                    <span class="ml-4 text-gray-400">Carregando clientes...</span>
-                                </div>
-                            </td>
-                        </tr>
+                        <!-- Linhas da tabela serão inseridas aqui pelo JavaScript -->
                     </tbody>
                 </table>
             </div>
@@ -189,6 +183,10 @@
                 <div class="form-control">
                     <input id="edit-razaoSocial" type="text" required class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
                     <label for="edit-razaoSocial" class="form-label">Razão Social / Nome</label>
+                </div>
+                <div class="form-control">
+                    <input id="edit-email" type="email" class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
+                    <label for="edit-email" class="form-label">Email</label>
                 </div>
                 <div class="form-control">
                     <input id="edit-telefone" type="text" required class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" " maxlength="15">
@@ -375,6 +373,7 @@
                 tipo: document.getElementById('client-type').value,
                 cpfCnpj: document.getElementById('cpfCnpj').value,
                 razaoSocial: document.getElementById('razaoSocial').value,
+                email: document.getElementById('email').value,
                 telefone: document.getElementById('telefone').value,
                 endereco: document.getElementById('endereco').value,
             };
@@ -407,6 +406,7 @@
             editClientTypeSelect.value = client.tipo;
             editCpfCnpjInput.value = client.cpfCnpj;
             document.getElementById('edit-razaoSocial').value = client.razaoSocial;
+            document.getElementById('edit-email').value = client.email || '';
             editTelefoneInput.value = client.telefone;
             document.getElementById('edit-endereco').value = client.endereco;
             
@@ -442,6 +442,7 @@
                 tipo: document.getElementById('edit-client-type').value,
                 cpfCnpj: document.getElementById('edit-cpfCnpj').value,
                 razaoSocial: document.getElementById('edit-razaoSocial').value,
+                email: document.getElementById('edit-email').value,
                 telefone: document.getElementById('edit-telefone').value,
                 endereco: document.getElementById('edit-endereco').value,
             };

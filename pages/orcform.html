@@ -10,6 +10,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- jsPDF Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -67,7 +69,7 @@
 
     <div class="w-full max-w-4xl mx-auto">
         <div class="flex justify-between items-center mb-8">
-            <h1 class="text-4xl font-bold text-white">Criar Orçamento</h1>
+            <h1 id="form-title" class="text-4xl font-bold text-white">Criar Orçamento</h1>
             <a href="./orcamentos.html" class="flex items-center p-2 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
                   <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
@@ -249,14 +251,6 @@
                     <input id="endereco-faturamento" type="text" class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
                     <label for="endereco-faturamento" class="form-label">Endereço</label>
                 </div>
-                
-                <h2 class="text-2xl font-semibold text-white border-b border-gray-700 pb-2 pt-4">Anexos</h2>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <input type="file" id="anexo1" class="form-input w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-red-800 file:text-white hover:file:bg-red-900">
-                    <input type="file" id="anexo2" class="form-input w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-red-800 file:text-white hover:file:bg-red-900">
-                    <input type="file" id="anexo3" class="form-input w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-red-800 file:text-white hover:file:bg-red-900">
-                    <input type="file" id="anexo4" class="form-input w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-red-800 file:text-white hover:file:bg-red-900">
-                </div>
 
                 <div class="flex justify-end gap-4">
                     <button type="button" id="pdf-button" class="py-2 px-6 rounded-md text-white bg-gray-600 hover:bg-gray-700">Baixar PDF</button>
@@ -270,6 +264,8 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const { jsPDF } = window.jspdf;
 
         const firebaseConfig = {
             apiKey: "AIzaSyAWlLRvbcxZQvjzW7KT4A7Ls-iJ0I4BAGI",
@@ -518,6 +514,22 @@
             newServiceBlock.querySelector('.remove-servico-button').addEventListener('click', () => {
                 newServiceBlock.remove();
             });
+        });
+
+        // --- Lógica do PDF ---
+        document.getElementById('pdf-button').addEventListener('click', () => {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            // Lógica para coletar os dados do formulário e gerar o PDF
+            const os = document.getElementById('os-number').value;
+            const cliente = document.getElementById('cliente-nome').value;
+            
+            doc.text(`Orçamento OS: ${os}`, 10, 10);
+            doc.text(`Cliente: ${cliente}`, 10, 20);
+            // ... adicionar mais campos
+            
+            doc.save(`Orcamento_OS_${os}.pdf`);
         });
 
     </script>
