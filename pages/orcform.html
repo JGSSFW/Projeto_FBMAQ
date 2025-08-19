@@ -205,8 +205,61 @@
                         Adicionar Serviço
                     </button>
                 </div>
+                
+                <div class="border-t border-gray-700 my-6"></div>
 
-                <div class="flex justify-end">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="form-control">
+                        <input id="validade-proposta" type="date" class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
+                        <label for="validade-proposta" class="form-label">Validade da proposta</label>
+                    </div>
+                    <div class="form-control">
+                        <textarea id="observacoes" rows="3" class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" "></textarea>
+                        <label for="observacoes" class="form-label">Observações</label>
+                    </div>
+                </div>
+
+                <h2 class="text-2xl font-semibold text-white border-b border-gray-700 pb-2 pt-4">Ordem de Faturamento</h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="form-control">
+                        <input id="valor-faturamento" type="text" class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white" placeholder=" ">
+                        <label for="valor-faturamento" class="form-label">Valor</label>
+                    </div>
+                    <div class="form-control">
+                        <input id="condicao-pagamento" type="text" class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
+                        <label for="condicao-pagamento" class="form-label">Condição de pagamento</label>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="form-control">
+                        <input id="autorizado-por" type="text" class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
+                        <label for="autorizado-por" class="form-label">Autorizado por</label>
+                    </div>
+                    <div class="form-control">
+                        <input id="data-aprovacao" type="date" class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
+                        <label for="data-aprovacao" class="form-label">Data de Aprovação</label>
+                    </div>
+                    <div class="form-control">
+                        <input id="orcamentista" type="text" class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white" placeholder=" " disabled>
+                        <label for="orcamentista" class="form-label">Orçamentista</label>
+                    </div>
+                </div>
+                <div class="form-control">
+                    <input id="endereco-faturamento" type="text" class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
+                    <label for="endereco-faturamento" class="form-label">Endereço</label>
+                </div>
+                
+                <h2 class="text-2xl font-semibold text-white border-b border-gray-700 pb-2 pt-4">Anexos</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <input type="file" id="anexo1" class="form-input w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-red-800 file:text-white hover:file:bg-red-900">
+                    <input type="file" id="anexo2" class="form-input w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-red-800 file:text-white hover:file:bg-red-900">
+                    <input type="file" id="anexo3" class="form-input w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-red-800 file:text-white hover:file:bg-red-900">
+                    <input type="file" id="anexo4" class="form-input w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-red-800 file:text-white hover:file:bg-red-900">
+                </div>
+
+                <div class="flex justify-end gap-4">
+                    <button type="button" id="pdf-button" class="py-2 px-6 rounded-md text-white bg-gray-600 hover:bg-gray-700">Baixar PDF</button>
                     <button type="submit" class="py-2 px-6 rounded-md text-white bg-red-800 hover:bg-red-900">Salvar Orçamento</button>
                 </div>
             </form>
@@ -242,6 +295,14 @@
             if (user) {
                 // Preenche o campo "Aos cuidados de"
                 document.getElementById('cuidados').value = user.displayName || user.email;
+                document.getElementById('orcamentista').value = user.displayName || user.email;
+                
+                // Define a data atual no campo de data
+                const today = new Date();
+                const yyyy = today.getFullYear();
+                const mm = String(today.getMonth() + 1).padStart(2, '0'); // Janeiro é 0!
+                const dd = String(today.getDate()).padStart(2, '0');
+                document.getElementById('data').value = `${yyyy}-${mm}-${dd}`;
                 
                 // Busca o próximo número de OS
                 const orcamentosRef = collection(db, "orcamentos");
@@ -292,6 +353,7 @@
                         document.getElementById('email').value = client.email || '';
                         clienteCpfCnpjInput.value = client.cpfCnpj || '';
                         clienteCpfCnpjLabel.textContent = client.tipo === 'fisica' ? 'CPF' : 'CNPJ';
+                        document.getElementById('endereco-faturamento').value = client.endereco || '';
                         clienteSuggestions.classList.add('hidden');
                     };
                     clienteSuggestions.appendChild(suggestionDiv);
@@ -335,6 +397,14 @@
                 valorServicos: parseCurrency(document.getElementById('valor-servicos').value),
                 valorMaoObra: parseCurrency(document.getElementById('valor-mao-obra').value),
                 valorTotal: parseCurrency(document.getElementById('valor-total').value),
+                valorFaturamento: parseCurrency(document.getElementById('valor-faturamento').value),
+                condicaoPagamento: document.getElementById('condicao-pagamento').value,
+                autorizadoPor: document.getElementById('autorizado-por').value,
+                dataAprovacao: document.getElementById('data-aprovacao').value,
+                orcamentista: document.getElementById('orcamentista').value,
+                enderecoFaturamento: document.getElementById('endereco-faturamento').value,
+                validadeProposta: document.getElementById('validade-proposta').value,
+                observacoes: document.getElementById('observacoes').value,
                 status: 'Pendente'
             };
 
@@ -377,14 +447,16 @@
             const inputs = container.querySelectorAll('.valor-input');
             inputs.forEach(input => {
                 input.addEventListener('input', (e) => {
-                    const block = e.target.closest('.servico-block');
+                    const block = e.target.closest('.servico-block, form');
                     e.target.value = formatAsCurrency(e.target.value);
-                    calculateTotal(block);
+                    if (block.classList.contains('servico-block')) {
+                        calculateTotal(block);
+                    }
                 });
             });
         };
 
-        addValueInputListeners(document.getElementById('servicos-container'));
+        addValueInputListeners(document);
 
         // --- Lógica de Adicionar Serviço ---
         const addServicoButton = document.getElementById('add-servico-button');
