@@ -34,7 +34,7 @@
         <div class="flex flex-col md:flex-row justify-between items-center mb-8">
             <h1 class="text-4xl font-bold text-white mb-4 md:mb-0">Histórico de Orçamentos</h1>
             <div class="flex items-center gap-4">
-                 <a href="../menu.html" class="text-gray-300 hover:text-white transition-colors">Voltar</a>
+                 <a href="./menu.html" class="text-gray-300 hover:text-white transition-colors">Voltar</a>
                 <a href="./orcform.html" id="add-orcamento-button" class="w-full md:w-auto flex justify-center items-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-red-800 hover:bg-red-900">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" /></svg>
                     Criar Novo Orçamento
@@ -151,8 +151,7 @@
                                 </svg>
                             </button>
                             <div class="actions-dropdown absolute right-full mr-2 bottom-0 w-48 bg-gray-800 rounded-md shadow-lg z-20 hidden">
-                                <a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">Baixar PDF</a>
-                                <a href="./orcform.html?id=${orcamento.id}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">Editar</a>
+                                <a href="./orcform.html?id=${orcamento.id}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700">Visualizar</a>
                                 <a href="#" class="delete-orcamento-link block px-4 py-2 text-sm text-red-500 hover:bg-gray-700" data-id="${orcamento.id}" data-os="${orcamento.os}" data-cliente="${orcamento.clienteNome}">Apagar</a>
                             </div>
                         </div>

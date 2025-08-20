@@ -10,8 +10,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- jsPDF Library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <style>
         body {
             font-family: 'Inter', sans-serif;
@@ -54,7 +52,6 @@
             background-color: #1C1C1C;
             padding: 0 0.25rem;
         }
-        /* Correção para o fundo do autofill do navegador */
         input:-webkit-autofill,
         input:-webkit-autofill:hover, 
         input:-webkit-autofill:focus, 
@@ -62,6 +59,28 @@
             -webkit-box-shadow: 0 0 0 30px #1C1C1C inset !important;
             -webkit-text-fill-color: #FFFFFF !important;
             transition: background-color 5000s ease-in-out 0s;
+        }
+        /* Caixa de mensagens para feedback */
+        #message-box {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #28a745;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.5s, visibility 0.5s;
+        }
+        #message-box.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        #message-box.error {
+            background-color: #dc3545;
         }
     </style>
 </head>
@@ -152,8 +171,8 @@
                 <div class="form-control">
                     <select id="garantia" class="form-select w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500">
                         <option value="" disabled selected>Selecione uma opção</option>
-                        <option value="sim">Sim</option>
-                        <option value="nao">Não</option>
+                        <option value="Sim">Sim</option>
+                        <option value="Não">Não</option>
                     </select>
                     <label for="garantia" class="form-label">Equipamento na garantia</label>
                 </div>
@@ -164,43 +183,43 @@
                         <h2 class="text-2xl font-semibold text-white border-b border-gray-700 pb-2 pt-4">Serviços a Executar</h2>
                         
                         <div class="form-control mt-6">
-                            <input id="frota-equipamento" type="text" class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
-                            <label for="frota-equipamento" class="form-label">Frota do equipamento</label>
+                            <input type="text" class="frota-equipamento form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
+                            <label class="form-label">Frota do equipamento</label>
                         </div>
 
                         <div class="form-control mt-6">
-                            <textarea id="descricao" rows="4" class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" "></textarea>
-                            <label for="descricao" class="form-label">Descrição do problema</label>
+                            <textarea rows="4" class="descricao form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" "></textarea>
+                            <label class="form-label">Descrição do problema</label>
                         </div>
                         
                         <h3 class="text-xl font-semibold text-white pt-6">Valores</h3>
                         <div class="grid grid-cols-1 md:grid-cols-5 gap-6 mt-4">
                             <div class="form-control">
-                                <input id="valor-pecas" type="text" class="valor-input form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
-                                <label for="valor-pecas" class="form-label">Peças</label>
+                                <input type="text" class="valor-pecas valor-input form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
+                                <label class="form-label">Peças</label>
                             </div>
                             <div class="form-control">
-                                <input id="valor-recuperacoes" type="text" class="valor-input form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
-                                <label for="valor-recuperacoes" class="form-label">Recuperações</label>
+                                <input type="text" class="valor-recuperacoes valor-input form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
+                                <label class="form-label">Recuperações</label>
                             </div>
                             <div class="form-control">
-                                <input id="valor-servicos" type="text" class="valor-input form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
-                                <label for="valor-servicos" class="form-label">Serviços</label>
+                                <input type="text" class="valor-servicos valor-input form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
+                                <label class="form-label">Serviços</label>
                             </div>
                             <div class="form-control">
-                                <input id="valor-mao-obra" type="text" class="valor-input form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
-                                <label for="valor-mao-obra" class="form-label">Mão de obra</label>
+                                <input type="text" class="valor-mao-obra valor-input form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
+                                <label class="form-label">Mão de obra</label>
                             </div>
                             <div class="form-control">
-                                <input id="valor-total" type="text" class="valor-total form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white" placeholder=" " disabled>
-                                <label for="valor-total" class="form-label">Total</label>
+                                <input type="text" class="valor-total form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white" placeholder=" " disabled>
+                                <label class="form-label">Total</label>
                             </div>
                         </div>
                     </div>
                 </div>
-
-                <div id="additional-services-container"></div>
                 
+                <div id="additional-services-container"></div>
+
                 <div class="pt-4">
                     <button type="button" id="add-servico-button" class="w-full flex justify-center items-center py-2 px-4 border border-dashed border-gray-600 text-sm font-medium rounded-md text-gray-400 hover:text-white hover:border-white transition-colors">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" /></svg>
@@ -251,21 +270,30 @@
                     <input id="endereco-faturamento" type="text" class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
                     <label for="endereco-faturamento" class="form-label">Endereço</label>
                 </div>
+                
+                <h2 class="text-2xl font-semibold text-white border-b border-gray-700 pb-2 pt-4">Anexos</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <input type="file" id="anexo1" class="form-input w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-red-800 file:text-white hover:file:bg-red-900">
+                    <input type="file" id="anexo2" class="form-input w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-red-800 file:text-white hover:file:bg-red-900">
+                    <input type="file" id="anexo3" class="form-input w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-red-800 file:text-white hover:file:bg-red-900">
+                    <input type="file" id="anexo4" class="form-input w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-red-800 file:text-white hover:file:bg-red-900">
+                </div>
 
                 <div class="flex justify-end gap-4">
-                    <button type="button" id="pdf-button" class="py-2 px-6 rounded-md text-white bg-gray-600 hover:bg-gray-700">Baixar PDF</button>
+                    <button type="button" id="pdf-button" class="py-2 px-6 rounded-md text-white bg-gray-600 hover:bg-gray-700">Gerar PDF</button>
                     <button type="submit" class="py-2 px-6 rounded-md text-white bg-red-800 hover:bg-red-900">Salvar Orçamento</button>
                 </div>
             </form>
         </div>
     </div>
+    
+    <!-- Elemento para exibir mensagens de sucesso ou erro -->
+    <div id="message-box"></div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-        const { jsPDF } = window.jspdf;
+        import { getFirestore, collection, addDoc, getDocs, query, orderBy, limit, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAWlLRvbcxZQvjzW7KT4A7Ls-iJ0I4BAGI",
@@ -289,18 +317,15 @@
 
         onAuthStateChanged(auth, async (user) => {
             if (user) {
-                // Preenche o campo "Aos cuidados de"
                 document.getElementById('cuidados').value = user.displayName || user.email;
                 document.getElementById('orcamentista').value = user.displayName || user.email;
                 
-                // Define a data atual no campo de data
                 const today = new Date();
                 const yyyy = today.getFullYear();
-                const mm = String(today.getMonth() + 1).padStart(2, '0'); // Janeiro é 0!
+                const mm = String(today.getMonth() + 1).padStart(2, '0');
                 const dd = String(today.getDate()).padStart(2, '0');
                 document.getElementById('data').value = `${yyyy}-${mm}-${dd}`;
                 
-                // Busca o próximo número de OS
                 const orcamentosRef = collection(db, "orcamentos");
                 const q = query(orcamentosRef, orderBy("os", "desc"), limit(1));
                 const querySnapshot = await getDocs(q);
@@ -311,7 +336,6 @@
                 }
                 document.getElementById('os-number').value = String(nextOs).padStart(4, '0');
 
-                // Carrega os clientes para a busca
                 const clientesSnapshot = await getDocs(collection(db, "clientes"));
                 allClients = [];
                 clientesSnapshot.forEach((doc) => {
@@ -323,7 +347,6 @@
             }
         });
         
-        // Lógica para preencher campos ao selecionar um cliente
         clienteNomeInput.addEventListener('input', (e) => {
             const inputValue = e.target.value.toLowerCase();
             clienteSuggestions.innerHTML = '';
@@ -360,62 +383,13 @@
             }
         });
 
-        // Esconde as sugestões se clicar fora
         document.addEventListener('click', (e) => {
             if (e.target !== clienteNomeInput) {
                 clienteSuggestions.classList.add('hidden');
             }
         });
 
-        // Lógica do formulário de orçamento
-        orcamentoForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            const novoOrcamento = {
-                os: document.getElementById('os-number').value,
-                clienteNome: document.getElementById('cliente-nome').value,
-                clienteCpfCnpj: document.getElementById('cliente-cpfCnpj').value,
-                endereco: document.getElementById('endereco').value,
-                data: document.getElementById('data').value,
-                aosCuidadosDe: document.getElementById('cuidados').value,
-                telefone: document.getElementById('telefone').value,
-                email: document.getElementById('email').value,
-                objetoProposta: document.getElementById('objeto-proposta').value,
-                modelo: document.getElementById('modelo').value,
-                serie: document.getElementById('serie').value,
-                horimetro: document.getElementById('horimetro').value,
-                idEquipamento: document.getElementById('id-equipamento').value,
-                garantia: document.getElementById('garantia').value,
-                descricao: document.getElementById('descricao').value,
-                frotaEquipamento: document.getElementById('frota-equipamento').value,
-                valorPecas: parseCurrency(document.getElementById('valor-pecas').value),
-                valorRecuperacoes: parseCurrency(document.getElementById('valor-recuperacoes').value),
-                valorServicos: parseCurrency(document.getElementById('valor-servicos').value),
-                valorMaoObra: parseCurrency(document.getElementById('valor-mao-obra').value),
-                valorTotal: parseCurrency(document.getElementById('valor-total').value),
-                valorFaturamento: parseCurrency(document.getElementById('valor-faturamento').value),
-                condicaoPagamento: document.getElementById('condicao-pagamento').value,
-                autorizadoPor: document.getElementById('autorizado-por').value,
-                dataAprovacao: document.getElementById('data-aprovacao').value,
-                orcamentista: document.getElementById('orcamentista').value,
-                enderecoFaturamento: document.getElementById('endereco-faturamento').value,
-                validadeProposta: document.getElementById('validade-proposta').value,
-                observacoes: document.getElementById('observacoes').value,
-                status: 'Pendente'
-            };
-
-            try {
-                const docRef = await addDoc(collection(db, "orcamentos"), novoOrcamento);
-                console.log("Orçamento salvo com ID: ", docRef.id);
-                orcamentoForm.reset();
-                window.location.href = './orcamentos.html';
-            } catch (error) {
-                console.error("Erro ao salvar orçamento: ", error);
-                alert("Ocorreu um erro ao salvar o orçamento. Tente novamente.");
-            }
-        });
-
-        // --- Lógica de Cálculo de Valores ---
+        // --- Lógica de Cálculo e Formatação de Valores ---
         const formatAsCurrency = (value) => {
             if (!value) return '';
             let num = value.toString().replace(/\D/g, '');
@@ -443,20 +417,20 @@
             const inputs = container.querySelectorAll('.valor-input');
             inputs.forEach(input => {
                 input.addEventListener('input', (e) => {
-                    const block = e.target.closest('.servico-block, form');
+                    const block = e.target.closest('.servico-block');
                     e.target.value = formatAsCurrency(e.target.value);
-                    if (block.classList.contains('servico-block')) {
+                    if (block) {
                         calculateTotal(block);
                     }
                 });
             });
         };
 
-        addValueInputListeners(document);
-
+        addValueInputListeners(document.getElementById('servicos-container'));
+        
         // --- Lógica de Adicionar Serviço ---
         const addServicoButton = document.getElementById('add-servico-button');
-        const additionalServicesContainer = document.getElementById('additional-services-container');
+        const servicosContainer = document.getElementById('servicos-container');
         let servicoCounter = 1;
 
         addServicoButton.addEventListener('click', () => {
@@ -473,63 +447,156 @@
                         </svg>
                     </button>
                 </div>
-                
                 <div class="form-control mt-6">
-                    <input id="frota-equipamento-${servicoCounter}" type="text" class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
-                    <label for="frota-equipamento-${servicoCounter}" class="form-label">Frota do equipamento</label>
+                    <input type="text" class="frota-equipamento form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white" placeholder=" ">
+                    <label class="form-label">Frota do equipamento</label>
                 </div>
-
                 <div class="form-control mt-6">
-                    <textarea id="descricao-${servicoCounter}" rows="4" class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" "></textarea>
-                    <label for="descricao-${servicoCounter}" class="form-label">Descrição do problema</label>
+                    <textarea rows="4" class="descricao form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white" placeholder=" "></textarea>
+                    <label class="form-label">Descrição do problema</label>
                 </div>
-                
                 <h3 class="text-xl font-semibold text-white pt-6">Valores</h3>
                 <div class="grid grid-cols-1 md:grid-cols-5 gap-6 mt-4">
-                    <div class="form-control">
-                        <input id="valor-pecas-${servicoCounter}" type="text" class="valor-input form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
-                        <label for="valor-pecas-${servicoCounter}" class="form-label">Peças</label>
-                    </div>
-                    <div class="form-control">
-                        <input id="valor-recuperacoes-${servicoCounter}" type="text" class="valor-input form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
-                        <label for="valor-recuperacoes-${servicoCounter}" class="form-label">Recuperações</label>
-                    </div>
-                    <div class="form-control">
-                        <input id="valor-servicos-${servicoCounter}" type="text" class="valor-input form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
-                        <label for="valor-servicos-${servicoCounter}" class="form-label">Serviços</label>
-                    </div>
-                    <div class="form-control">
-                        <input id="valor-mao-obra-${servicoCounter}" type="text" class="valor-input form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
-                        <label for="valor-mao-obra-${servicoCounter}" class="form-label">Mão de obra</label>
-                    </div>
-                    <div class="form-control">
-                        <input id="valor-total-${servicoCounter}" type="text" class="valor-total form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white" placeholder=" " disabled>
-                        <label for="valor-total-${servicoCounter}" class="form-label">Total</label>
-                    </div>
+                    <div class="form-control"><input type="text" class="valor-pecas valor-input form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white" placeholder=" "><label class="form-label">Peças</label></div>
+                    <div class="form-control"><input type="text" class="valor-recuperacoes valor-input form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white" placeholder=" "><label class="form-label">Recuperações</label></div>
+                    <div class="form-control"><input type="text" class="valor-servicos valor-input form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white" placeholder=" "><label class="form-label">Serviços</label></div>
+                    <div class="form-control"><input type="text" class="valor-mao-obra valor-input form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white" placeholder=" "><label class="form-label">Mão de obra</label></div>
+                    <div class="form-control"><input type="text" class="valor-total form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white" placeholder=" " disabled><label class="form-label">Total</label></div>
                 </div>
             `;
-            additionalServicesContainer.appendChild(newServiceBlock);
+            servicosContainer.appendChild(newServiceBlock);
             addValueInputListeners(newServiceBlock);
             
-            newServiceBlock.querySelector('.remove-servico-button').addEventListener('click', () => {
-                newServiceBlock.remove();
+            newServiceBlock.querySelector('.remove-servico-button').addEventListener('click', (e) => {
+                e.target.closest('.servico-block').remove();
             });
         });
+        
+        // --- Lógica da Máscara de Moeda para Faturamento ---
+        const valorFaturamentoInput = document.getElementById('valor-faturamento');
+        valorFaturamentoInput.addEventListener('input', (e) => {
+            e.target.value = formatAsCurrency(e.target.value);
+        });
 
-        // --- Lógica do PDF ---
+        // --- Função para Coletar Dados do Formulário ---
+        const getOrcamentoData = (forPdf = false) => {
+            let totalPecas = 0;
+            let totalRecuperacoes = 0;
+            let totalServicos = 0;
+            let totalMaoObra = 0;
+            let totalGeral = 0;
+            let descricoes = [];
+            let frotas = [];
+
+            document.querySelectorAll('.servico-block').forEach(block => {
+                totalPecas += parseCurrency(block.querySelector('.valor-pecas')?.value);
+                totalRecuperacoes += parseCurrency(block.querySelector('.valor-recuperacoes')?.value);
+                totalServicos += parseCurrency(block.querySelector('.valor-servicos')?.value);
+                totalMaoObra += parseCurrency(block.querySelector('.valor-mao-obra')?.value);
+                totalGeral += parseCurrency(block.querySelector('.valor-total')?.value);
+                
+                const desc = block.querySelector('.descricao')?.value;
+                if(desc) descricoes.push(desc);
+
+                const frota = block.querySelector('.frota-equipamento')?.value;
+                if(frota) frotas.push(frota);
+            });
+            
+            const data = {
+                os: document.getElementById('os-number').value,
+                clienteNome: document.getElementById('cliente-nome').value,
+                clienteCpfCnpj: document.getElementById('cliente-cpfCnpj').value,
+                endereco: document.getElementById('endereco').value,
+                telefone: document.getElementById('telefone').value,
+                email: document.getElementById('email').value,
+                data: document.getElementById('data').value,
+                objetoProposta: document.getElementById('objeto-proposta').value,
+                modelo: document.getElementById('modelo').value,
+                serie: document.getElementById('serie').value,
+                horimetro: document.getElementById('horimetro').value,
+                idEquipamento: document.getElementById('id-equipamento').value,
+                garantia: document.getElementById('garantia').value,
+                frota: frotas.join('; '),
+                descricao: descricoes.join('; '),
+                valorPecas: totalPecas,
+                valorRecuperacoes: totalRecuperacoes,
+                valorServicos: totalServicos,
+                valorMaoObra: totalMaoObra,
+                valorTotal: totalGeral,
+                valorFaturamento: parseCurrency(document.getElementById('valor-faturamento').value),
+                condicaoPagamento: document.getElementById('condicao-pagamento').value,
+                enderecoFaturamento: document.getElementById('endereco-faturamento').value,
+                autorizadoPor: document.getElementById('autorizado-por').value,
+                dataAprovacao: document.getElementById('data-aprovacao').value,
+                validadeProposta: document.getElementById('validade-proposta').value,
+                observacoes: document.getElementById('observacoes').value,
+                orcamentista: document.getElementById('orcamentista').value,
+                aosCuidadosDe: document.getElementById('cuidados').value,
+                status: 'Pendente',
+                criadoEm: serverTimestamp()
+            };
+
+            if (forPdf) {
+                return {
+                    os: data.os,
+                    cliente: data.clienteNome,
+                    cpfCnpj: data.clienteCpfCnpj,
+                    endereco: data.endereco,
+                    telefone: data.telefone,
+                    email: data.email,
+                    data: data.data,
+                    objeto: data.objetoProposta,
+                    modelo: data.modelo,
+                    serie: data.serie,
+                    horimetro: data.horimetro,
+                    idEquipamento: data.idEquipamento,
+                    garantia: data.garantia,
+                    frota: data.frota,
+                    descricao: data.descricao,
+                    pecas: formatAsCurrency(data.valorPecas.toFixed(2)),
+                    recuperacoes: formatAsCurrency(data.valorRecuperacoes.toFixed(2)),
+                    servicos: formatAsCurrency(data.valorServicos.toFixed(2)),
+                    maoObra: formatAsCurrency(data.valorMaoObra.toFixed(2)),
+                    total: formatAsCurrency(data.valorTotal.toFixed(2)),
+                    valorFaturamento: formatAsCurrency(data.valorFaturamento.toFixed(2)),
+                    condicaoPagamento: data.condicaoPagamento,
+                    enderecoFaturamento: data.enderecoFaturamento,
+                    autorizadoPor: data.autorizadoPor,
+                    dataAprovacao: data.dataAprovacao,
+                    validade: data.validadeProposta,
+                    observacoes: data.observacoes,
+                };
+            }
+            return data;
+        };
+
+        // --- Lógica do Botão Gerar PDF ---
         document.getElementById('pdf-button').addEventListener('click', () => {
-            const { jsPDF } = window.jspdf;
-            const doc = new jsPDF();
+            const orcamentoDadosParaPdf = getOrcamentoData(true);
+            localStorage.setItem('orcamentoDados', JSON.stringify(orcamentoDadosParaPdf));
+            window.open('pdf.html', '_blank');
+        });
 
-            // Lógica para coletar os dados do formulário e gerar o PDF
-            const os = document.getElementById('os-number').value;
-            const cliente = document.getElementById('cliente-nome').value;
-            
-            doc.text(`Orçamento OS: ${os}`, 10, 10);
-            doc.text(`Cliente: ${cliente}`, 10, 20);
-            // ... adicionar mais campos
-            
-            doc.save(`Orcamento_OS_${os}.pdf`);
+        // --- Lógica de Salvar Orçamento ---
+        orcamentoForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const saveButton = e.submitter;
+            saveButton.disabled = true;
+            saveButton.textContent = 'Salvando...';
+
+            const orcamentoParaSalvar = getOrcamentoData(false);
+
+            try {
+                await addDoc(collection(db, "orcamentos"), orcamentoParaSalvar);
+                // Armazena a mensagem de sucesso para a próxima página
+                sessionStorage.setItem('showSuccessMessage', 'Orçamento salvo com sucesso!');
+                window.location.href = './orcamentos.html';
+            } catch (error) {
+                console.error("Erro ao salvar orçamento: ", error);
+                alert("Ocorreu um erro ao salvar o orçamento. Verifique o console para mais detalhes.");
+                saveButton.disabled = false;
+                saveButton.textContent = 'Salvar Orçamento';
+            }
         });
 
     </script>
