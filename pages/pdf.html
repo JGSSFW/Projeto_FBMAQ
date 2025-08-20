@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Orçamento - FB MAQ</title>
+  <!-- CDN da biblioteca html2pdf.js para gerar o PDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" xintegrity="sha512-GsLlZN/3F2ErC5ifS5QtgpiJtWd43JWSuIgh7mbzZ8zBps+dvLusV+eNQATqgA/HdeKFVgA5v3S/cIrLF7QnIg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <style>
+    /* Estilos gerais do corpo da página */
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f4f4f9;
+      color: #333;
+    }
+
+    /* Container principal que será convertido para PDF */
+    #pdf-container {
+      margin: 0 auto;
+      padding: 30px 40px;
+      max-width: 800px;
+      width: 100%;
+      background: #fff;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      border-radius: 8px;
+    }
+
+    /* Cabeçalho com logo e título */
+    header {
+      display: flex;
+      align-items: center;
+      border-bottom: 4px solid #900;
+      padding-bottom: 15px;
+      margin-bottom: 30px;
+    }
+    header img {
+      height: 70px;
+      margin-right: 20px;
+    }
+    h1 {
+      color: #900;
+      margin: 0;
+      font-size: 28px;
+      letter-spacing: 1px;
+    }
+
+    /* Estilo dos títulos de seção */
+    h2 {
+      color: #900;
+      border-bottom: 2px solid #c00;
+      padding-bottom: 5px;
+      margin: 25px 0 15px;
+      font-size: 18px;
+    }
+
+    /* Seções de conteúdo */
+    section {
+      margin-bottom: 25px;
+      page-break-inside: avoid; /* Evita que a seção seja cortada */
+    }
+
+    /* Layout em grade para organizar os dados */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 8px 40px;
+    }
+    .grid p {
+      margin: 4px 0;
+      font-size: 14px;
+    }
+    .grid p b {
+        color: #555;
+    }
+
+    /* Tabela de valores */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+      font-size: 14px;
+      page-break-inside: avoid; /* Evita que a tabela seja cortada */
+    }
+    td, th {
+      border: 1px solid #ccc;
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background: #f9eaea;
+      color: #900;
+      font-weight: 600;
+    }
+    .total {
+      font-weight: bold;
+      background: #fcecec;
+      color: #900;
+      font-size: 15px;
+    }
+    .total td:first-child {
+        text-align: right;
+        padding-right: 20px;
+    }
+
+    /* Área de assinaturas */
+    .assinatura {
+      margin-top: 60px;
+      display: flex;
+      justify-content: space-around;
+      gap: 40px;
+      page-break-inside: avoid; /* Evita que a assinatura seja cortada */
+    }
+    .assinatura div {
+      text-align: center;
+      width: 45%;
+      font-size: 14px;
+    }
+    .assinatura-line {
+      margin-top: 60px;
+      border-top: 1px solid #333;
+      padding-top: 8px;
+    }
+
+    /* Rodapé */
+    footer {
+      border-top: 3px solid #900;
+      margin-top: 40px;
+      padding-top: 15px;
+      font-size: 13px;
+      text-align: center;
+      color: #666;
+    }
+    
+    .button-container {
+        text-align: center;
+        padding: 20px;
+    }
+
+    /* Estilo do botão de download */
+    #baixar-pdf {
+      padding: 12px 25px;
+      border: none;
+      background: #900;
+      color: #fff;
+      cursor: pointer;
+      font-size: 16px;
+      border-radius: 5px;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+    #baixar-pdf:hover {
+      background: #600;
+      transform: translateY(-2px);
+    }
+    #baixar-pdf:disabled {
+        background-color: #aaa;
+        cursor: not-allowed;
+    }
+    
+    /* Caixa de mensagens para feedback */
+    #message-box {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background-color: #28a745;
+        color: white;
+        padding: 15px;
+        border-radius: 5px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        z-index: 1000;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.5s, visibility 0.5s;
+    }
+    #message-box.show {
+        opacity: 1;
+        visibility: visible;
+    }
+    #message-box.error {
+        background-color: #dc3545;
+    }
+
+    /* ESTILOS PARA IMPRESSÃO / GERAÇÃO DE PDF */
+    @media print {
+        body {
+            padding: 0;
+            margin: 0;
+            background-color: #fff;
+        }
+        .button-container, #message-box {
+            display: none;
+        }
+        #pdf-container {
+            margin: 0;
+            padding: 0;
+            max-width: 100%;
+            width: 100%;
+            box-shadow: none;
+            border-radius: 0;
+        }
+    }
+  </style>
+</head>
+<body>
+    <!-- Container que será exportado como PDF -->
+    <div id="pdf-container">
+      <header>
+        <!-- 
+          IMPORTANTE: O caminho relativo da imagem abaixo (../assets/...) provavelmente NÃO funcionará
+          ao gerar o PDF, pois a biblioteca html2pdf não consegue acessá-lo.
+
+          SOLUÇÃO RECOMENDADA: Converta sua imagem para Base64 e cole o resultado no 'src'.
+          1. Vá para um site como 'base64-image.de'
+          2. Faça o upload do seu arquivo 'logo.png'
+          3. Copie o código gerado (algo que começa com 'data:image/png;base64,iVBORw0KGgo...')
+          4. Substitua o 'src' abaixo pelo código copiado. Exemplo:
+             <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgA..." alt="Logo FB MAQ">
+        -->
+        <img src="../assets/images/logo.png" alt="Logo FB MAQ" crossorigin="anonymous" onerror="this.onerror=null;this.src='https://placehold.co/200x70/900/fff?text=Logo+Nao+Encontrada';">
+        <h1>FB MAQ - Orçamento</h1>
+      </header>
+
+      <main>
+        <section>
+          <h2>Dados do Cliente</h2>
+          <div class="grid">
+            <p><b>Cliente:</b> <span id="c-nome"></span></p>
+            <p><b>CPF/CNPJ:</b> <span id="c-cpf"></span></p>
+            <p><b>Endereço:</b> <span id="c-endereco"></span></p>
+            <p><b>Telefone:</b> <span id="c-telefone"></span></p>
+            <p><b>Email:</b> <span id="c-email"></span></p>
+            <p><b>Data:</b> <span id="c-data"></span></p>
+          </div>
+        </section>
+
+        <section>
+          <h2>Informações do Equipamento</h2>
+          <div class="grid">
+            <p><b>Objeto:</b> <span id="c-objeto"></span></p>
+            <p><b>Modelo:</b> <span id="c-modelo"></span></p>
+            <p><b>Série:</b> <span id="c-serie"></span></p>
+            <p><b>Horímetro:</b> <span id="c-horimetro"></span></p>
+            <p><b>ID:</b> <span id="c-id"></span></p>
+            <p><b>Garantia:</b> <span id="c-garantia"></span></p>
+            <p><b>Frota:</b> <span id="c-frota"></span></p>
+            <p><b>Descrição:</b> <span id="c-descricao"></span></p>
+          </div>
+        </section>
+
+        <section>
+          <h2>Valores</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Descrição</th>
+                <th>Valor</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Peças</td><td id="c-pecas"></td></tr>
+              <tr><td>Recuperações</td><td id="c-recuperacoes"></td></tr>
+              <tr><td>Serviços</td><td id="c-servicos"></td></tr>
+              <tr><td>Mão de Obra</td><td id="c-maoobra"></td></tr>
+              <tr class="total"><td>TOTAL</td><td id="c-total"></td></tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section>
+          <h2>Ordem de Faturamento</h2>
+          <div class="grid">
+            <p><b>Valor:</b> <span id="c-valor-faturamento"></span></p>
+            <p><b>Pagamento:</b> <span id="c-condicao"></span></p>
+            <p><b>Endereço:</b> <span id="c-endereco-faturamento"></span></p>
+            <p><b>Autorizado por:</b> <span id="c-autorizado"></span></p>
+            <p><b>Data Aprovação:</b> <span id="c-data-aprovacao"></span></p>
+          </div>
+        </section>
+
+        <section>
+          <h2>Validade / Observações</h2>
+          <p><b>Validade:</b> <span id="c-validade"></span></p>
+          <p><b>Observações:</b> <span id="c-observacoes"></span></p>
+        </section>
+
+        <div class="assinatura">
+          <div>
+            <div class="assinatura-line">Assinatura do Cliente</div>
+          </div>
+          <div>
+            <div class="assinatura-line">FB MAQ</div>
+          </div>
+        </div>
+      </main>
+
+      <footer>
+        FB MAQ - Soluções em Máquinas e Equipamentos • Documento gerado automaticamente
+      </footer>
+    </div>
+
+    <div class="button-container">
+        <!-- Botão para acionar a geração do PDF -->
+        <button id="baixar-pdf">Baixar PDF</button>
+    </div>
+  
+  <!-- Elemento para exibir mensagens de sucesso ou erro -->
+  <div id="message-box"></div>
+
+  <script>
+    // Função para exibir mensagens de feedback ao usuário
+    function showMessage(message, isError = false) {
+        const messageBox = document.getElementById('message-box');
+        messageBox.textContent = message;
+        messageBox.className = 'show';
+        if (isError) {
+            messageBox.classList.add('error');
+        } else {
+            messageBox.classList.remove('error');
+        }
+
+        // Esconde a mensagem após 3 segundos
+        setTimeout(() => {
+            messageBox.className = '';
+        }, 3000);
+    }
+
+    // Função para preencher os campos do orçamento
+    function preencherDados(dados) {
+        // Mapeamento dos IDs dos elementos para as chaves dos dados
+        const campos = {
+            "c-nome": dados.cliente, "c-cpf": dados.cpfCnpj, "c-endereco": dados.endereco,
+            "c-telefone": dados.telefone, "c-email": dados.email, "c-data": dados.data,
+            "c-objeto": dados.objeto, "c-modelo": dados.modelo, "c-serie": dados.serie,
+            "c-horimetro": dados.horimetro, "c-id": dados.idEquipamento, "c-garantia": dados.garantia,
+            "c-frota": dados.frota, "c-descricao": dados.descricao, "c-pecas": dados.pecas,
+            "c-recuperacoes": dados.recuperacoes, "c-servicos": dados.servicos, "c-maoobra": dados.maoObra,
+            "c-total": dados.total, "c-valor-faturamento": dados.valorFaturamento,
+            "c-condicao": dados.condicaoPagamento, "c-endereco-faturamento": dados.enderecoFaturamento,
+            "c-autorizado": dados.autorizadoPor, "c-data-aprovacao": dados.dataAprovacao,
+            "c-validade": dados.validade, "c-observacoes": dados.observacoes
+        };
+
+        // Itera sobre o mapeamento e preenche o textContent de cada elemento
+        for (const id in campos) {
+            const element = document.getElementById(id);
+            if (element) {
+                element.textContent = campos[id] || "---"; // Usa '---' se o dado for nulo/vazio
+            }
+        }
+    }
+
+    // Aguarda o carregamento completo do DOM
+    document.addEventListener("DOMContentLoaded", () => {
+        // Tenta carregar os dados do localStorage
+        let dadosOrcamento = JSON.parse(localStorage.getItem("orcamentoDados"));
+
+        // Se não houver dados no localStorage, usa dados de exemplo para demonstração
+        if (!dadosOrcamento) {
+            console.warn("Nenhum dado encontrado no localStorage. Usando dados de exemplo.");
+            dadosOrcamento = {
+                cliente: "Empresa Exemplo LTDA", cpfCnpj: "00.000.000/0001-00",
+                endereco: "Rua das Flores, 123, São Paulo, SP", telefone: "(11) 98765-4321",
+                email: "contato@empresaexemplo.com", data: new Date().toLocaleDateString('pt-BR'),
+                objeto: "Manutenção Corretiva", modelo: "Escavadeira Hidráulica 320",
+                serie: "ABC-12345", horimetro: "5400h", idEquipamento: "E-589",
+                garantia: "3 meses (peças e serviços)", frota: "FROTA-05",
+                descricao: "Revisão completa do sistema hidráulico e troca de filtros.",
+                pecas: "R$ 8.500,00", recuperacoes: "R$ 2.200,00", servicos: "R$ 3.500,00",
+                maoObra: "R$ 4.800,00", total: "R$ 19.000,00",
+                valorFaturamento: "R$ 19.000,00", condicaoPagamento: "30/60 dias",
+                enderecoFaturamento: "Mesmo do cliente", autorizadoPor: "Sr. João da Silva",
+                dataAprovacao: new Date().toLocaleDateString('pt-BR'),
+                validade: "15 dias", observacoes: "O equipamento será liberado após a confirmação do primeiro pagamento."
+            };
+        }
+
+        // Preenche a página com os dados
+        preencherDados(dadosOrcamento);
+
+        const downloadButton = document.getElementById("baixar-pdf");
+        const containerParaPdf = document.getElementById("pdf-container");
+
+        // Adiciona o evento de clique ao botão de download
+        downloadButton.addEventListener("click", () => {
+            console.log("Iniciando geração do PDF...");
+
+            // Desabilita o botão para evitar cliques múltiplos
+            downloadButton.disabled = true;
+            downloadButton.textContent = "Gerando PDF...";
+
+            // Verifica se a biblioteca html2pdf está carregada
+            if (typeof html2pdf === 'undefined') {
+                console.error("A biblioteca html2pdf.js não foi carregada.");
+                showMessage("Erro ao gerar PDF. A biblioteca não foi carregada.", true);
+                downloadButton.disabled = false;
+                downloadButton.textContent = "Baixar PDF";
+                return;
+            }
+
+            const opt = {
+                margin: 10, // Margem uniforme
+                filename: `orcamento-${dadosOrcamento.cliente || "cliente"}.pdf`,
+                image: { type: "jpeg", quality: 0.98 },
+                html2canvas: { scale: 2, useCORS: true, scrollY: 0 },
+                jsPDF: { unit: "mm", format: "a4", orientation: "portrait" },
+                pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+            };
+
+            // Gera o PDF a partir do container
+            html2pdf().from(containerParaPdf).set(opt).save()
+                .then(() => {
+                    console.log("PDF gerado e salvo com sucesso!");
+                    showMessage("PDF gerado com sucesso!");
+                })
+                .catch(error => {
+                    console.error("Erro ao gerar o PDF:", error);
+                    showMessage("Ocorreu um erro ao gerar o PDF.", true);
+                })
+                .finally(() => {
+                    // Reabilita o botão após a conclusão
+                    downloadButton.disabled = false;
+                    downloadButton.textContent = "Baixar PDF";
+                });
+        });
+    });
+  </script>
+</body>
+</html>
