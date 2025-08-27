@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,25 +17,39 @@
             background-color: #121212;
             color: #E0E0E0;
         }
+
         .glass-container {
             background: rgba(28, 28, 28, 0.6);
             -webkit-backdrop-filter: blur(12px);
             backdrop-filter: blur(12px);
             border: 1px solid rgba(255, 255, 255, 0.1);
         }
+
         @keyframes pulse-red {
-            0%, 100% { box-shadow: 0 0 10px rgba(255, 50, 50, 0.4), 0 0 15px rgba(255, 50, 50, 0.3); }
-            50% { box-shadow: 0 0 25px rgba(255, 0, 0, 0.8), 0 0 40px rgba(255, 0, 0, 0.6); }
+
+            0%,
+            100% {
+                box-shadow: 0 0 10px rgba(255, 50, 50, 0.4), 0 0 15px rgba(255, 50, 50, 0.3);
+            }
+
+            50% {
+                box-shadow: 0 0 25px rgba(255, 0, 0, 0.8), 0 0 40px rgba(255, 0, 0, 0.6);
+            }
         }
+
         .neon-shadow {
             animation: pulse-red 6s infinite ease-in-out;
         }
-        .form-input, .form-select {
+
+        .form-input,
+        .form-select {
             background-color: #1C1C1C;
         }
+
         .form-control {
             position: relative;
         }
+
         .form-label {
             position: absolute;
             top: 0.85rem;
@@ -43,23 +58,26 @@
             pointer-events: none;
             transition: all 0.2s ease-out;
         }
-        .form-input:focus ~ .form-label,
-        .form-input:not(:placeholder-shown) ~ .form-label,
-        .form-select:focus ~ .form-label,
-        .form-select:not([value=""]) ~ .form-label {
+
+        .form-input:focus~.form-label,
+        .form-input:not(:placeholder-shown)~.form-label,
+        .form-select:focus~.form-label,
+        .form-select:not([value=""])~.form-label {
             transform: translateY(-1.4rem) scale(0.8);
             color: #F87171;
             background-color: #1C1C1C;
             padding: 0 0.25rem;
         }
+
         input:-webkit-autofill,
-        input:-webkit-autofill:hover, 
-        input:-webkit-autofill:focus, 
+        input:-webkit-autofill:hover,
+        input:-webkit-autofill:focus,
         input:-webkit-autofill:active {
             -webkit-box-shadow: 0 0 0 30px #1C1C1C inset !important;
             -webkit-text-fill-color: #FFFFFF !important;
             transition: background-color 5000s ease-in-out 0s;
         }
+
         /* Caixa de mensagens para feedback */
         #message-box {
             position: fixed;
@@ -69,29 +87,35 @@
             color: white;
             padding: 15px;
             border-radius: 5px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
             z-index: 1000;
             opacity: 0;
             visibility: hidden;
             transition: opacity 0.5s, visibility 0.5s;
         }
+
         #message-box.show {
             opacity: 1;
             visibility: visible;
         }
+
         #message-box.error {
             background-color: #dc3545;
         }
     </style>
 </head>
+
 <body class="min-h-screen p-8">
 
     <div class="w-full max-w-4xl mx-auto">
         <div class="flex justify-between items-center mb-8">
             <h1 id="form-title" class="text-4xl font-bold text-white">Criar Orçamento</h1>
-            <a href="./orcamentos.html" class="flex items-center p-2 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">
+            <a href="./orcamentos.html"
+                class="flex items-center p-2 rounded-lg text-gray-300 hover:bg-gray-700 hover:text-white transition-colors">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                  <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" />
+                    <path fill-rule="evenodd"
+                        d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                        clip-rule="evenodd" />
                 </svg>
                 Voltar
             </a>
@@ -99,46 +123,64 @@
 
         <div class="glass-container neon-shadow rounded-2xl p-8">
             <form id="orcamento-form" class="space-y-6">
-                
+
                 <h2 class="text-2xl font-semibold text-white border-b border-gray-700 pb-2">Cliente</h2>
-                
+
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div class="form-control md:col-span-1">
-                        <input id="os-number" type="text" class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white" placeholder=" " disabled>
+                        <input id="os-number" type="text"
+                            class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white"
+                            placeholder=" " disabled>
                         <label for="os-number" class="form-label">OS</label>
                     </div>
                     <div class="form-control md:col-span-2 relative">
-                        <input id="cliente-nome" type="text" autocomplete="off" class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
+                        <input id="cliente-nome" type="text" autocomplete="off"
+                            class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500"
+                            placeholder=" ">
                         <label for="cliente-nome" class="form-label">Cliente</label>
-                        <div id="cliente-suggestions" class="absolute z-10 w-full bg-[#2D2D2D] border border-gray-600 rounded-md mt-1 hidden max-h-40 overflow-y-auto"></div>
+                        <div id="cliente-suggestions"
+                            class="absolute z-10 w-full bg-[#2D2D2D] border border-gray-600 rounded-md mt-1 hidden max-h-40 overflow-y-auto">
+                        </div>
                     </div>
                 </div>
-                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="form-control">
-                        <input id="cliente-cpfCnpj" type="text" class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
+                        <input id="cliente-cpfCnpj" type="text"
+                            class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500"
+                            placeholder=" ">
                         <label id="cliente-cpfCnpj-label" for="cliente-cpfCnpj" class="form-label">CPF/CNPJ</label>
                     </div>
                     <div class="form-control">
-                        <input id="endereco" type="text" class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
+                        <input id="endereco" type="text"
+                            class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500"
+                            placeholder=" ">
                         <label for="endereco" class="form-label">Endereço</label>
                     </div>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div class="form-control">
-                        <input id="data" type="date" class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
+                        <input id="data" type="date"
+                            class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500"
+                            placeholder=" ">
                         <label for="data" class="form-label">Data</label>
                     </div>
                     <div class="form-control">
-                        <input id="cuidados" type="text" class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white" placeholder=" " disabled>
+                        <input id="cuidados" type="text"
+                            class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white"
+                            placeholder=" " disabled>
                         <label for="cuidados" class="form-label">Aos cuidados de</label>
                     </div>
                     <div class="form-control">
-                        <input id="telefone" type="text" class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
+                        <input id="telefone" type="text"
+                            class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500"
+                            placeholder=" ">
                         <label for="telefone" class="form-label">Telefone</label>
                     </div>
                 </div>
-                 <div class="form-control">
-                    <input id="email" type="email" class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
+                <div class="form-control">
+                    <input id="email" type="email"
+                        class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500"
+                        placeholder=" ">
                     <label for="email" class="form-label">Email</label>
                 </div>
 
@@ -146,155 +188,211 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="form-control">
-                        <input id="objeto-proposta" type="text" class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
+                        <input id="objeto-proposta" type="text"
+                            class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500"
+                            placeholder=" ">
                         <label for="objeto-proposta" class="form-label">Objeto da proposta</label>
                     </div>
                     <div class="form-control">
-                        <input id="modelo" type="text" class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
+                        <input id="modelo" type="text"
+                            class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500"
+                            placeholder=" ">
                         <label for="modelo" class="form-label">Modelo</label>
                     </div>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div class="form-control">
-                        <input id="serie" type="text" class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
+                        <input id="serie" type="text"
+                            class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500"
+                            placeholder=" ">
                         <label for="serie" class="form-label">Série</label>
                     </div>
                     <div class="form-control">
-                        <input id="horimetro" type="text" class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
+                        <input id="horimetro" type="text"
+                            class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500"
+                            placeholder=" ">
                         <label for="horimetro" class="form-label">Horímetro</label>
                     </div>
                     <div class="form-control">
-                        <input id="id-equipamento" type="text" class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
+                        <input id="id-equipamento" type="text"
+                            class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500"
+                            placeholder=" ">
                         <label for="id-equipamento" class="form-label">ID do equipamento</label>
                     </div>
                 </div>
                 <div class="form-control">
-                    <select id="garantia" class="form-select w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500">
+                    <select id="garantia"
+                        class="form-select w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500">
                         <option value="" disabled selected>Selecione uma opção</option>
                         <option value="Sim">Sim</option>
                         <option value="Não">Não</option>
                     </select>
                     <label for="garantia" class="form-label">Equipamento na garantia</label>
                 </div>
-                
+
                 <div id="servicos-container">
                     <!-- Bloco de Serviço Original -->
                     <div class="servico-block">
-                        <h2 class="text-2xl font-semibold text-white border-b border-gray-700 pb-2 pt-4">Serviços a Executar</h2>
-                        
+                        <h2 class="text-2xl font-semibold text-white border-b border-gray-700 pb-2 pt-4">Serviços a
+                            Executar</h2>
+
                         <div class="form-control mt-6">
-                            <input type="text" class="frota-equipamento form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
+                            <input type="text"
+                                class="frota-equipamento form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500"
+                                placeholder=" ">
                             <label class="form-label">Frota do equipamento</label>
                         </div>
 
                         <div class="form-control mt-6">
-                            <textarea rows="4" class="descricao form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" "></textarea>
+                            <textarea rows="4"
+                                class="descricao form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500"
+                                placeholder=" "></textarea>
                             <label class="form-label">Descrição do problema</label>
                         </div>
-                        
+
                         <h3 class="text-xl font-semibold text-white pt-6">Valores</h3>
                         <div class="grid grid-cols-1 md:grid-cols-5 gap-6 mt-4">
                             <div class="form-control">
-                                <input type="text" class="valor-pecas valor-input form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
+                                <input type="text"
+                                    class="valor-pecas valor-input form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500"
+                                    placeholder=" ">
                                 <label class="form-label">Peças</label>
                             </div>
                             <div class="form-control">
-                                <input type="text" class="valor-recuperacoes valor-input form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
+                                <input type="text"
+                                    class="valor-recuperacoes valor-input form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500"
+                                    placeholder=" ">
                                 <label class="form-label">Recuperações</label>
                             </div>
                             <div class="form-control">
-                                <input type="text" class="valor-servicos valor-input form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
+                                <input type="text"
+                                    class="valor-servicos valor-input form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500"
+                                    placeholder=" ">
                                 <label class="form-label">Serviços</label>
                             </div>
                             <div class="form-control">
-                                <input type="text" class="valor-mao-obra valor-input form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
+                                <input type="text"
+                                    class="valor-mao-obra valor-input form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500"
+                                    placeholder=" ">
                                 <label class="form-label">Mão de obra</label>
                             </div>
                             <div class="form-control">
-                                <input type="text" class="valor-total form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white" placeholder=" " disabled>
+                                <input type="text"
+                                    class="valor-total form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white"
+                                    placeholder=" " disabled>
                                 <label class="form-label">Total</label>
                             </div>
                         </div>
                     </div>
                 </div>
-                
+
                 <div id="additional-services-container"></div>
 
                 <div class="pt-4">
-                    <button type="button" id="add-servico-button" class="w-full flex justify-center items-center py-2 px-4 border border-dashed border-gray-600 text-sm font-medium rounded-md text-gray-400 hover:text-white hover:border-white transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" /></svg>
+                    <button type="button" id="add-servico-button"
+                        class="w-full flex justify-center items-center py-2 px-4 border border-dashed border-gray-600 text-sm font-medium rounded-md text-gray-400 hover:text-white hover:border-white transition-colors">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20"
+                            fill="currentColor">
+                            <path fill-rule="evenodd"
+                                d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z"
+                                clip-rule="evenodd" />
+                        </svg>
                         Adicionar Serviço
                     </button>
                 </div>
-                
+
                 <div class="border-t border-gray-700 my-6"></div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="form-control">
-                        <input id="validade-proposta" type="date" class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
+                        <input id="validade-proposta" type="date"
+                            class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500"
+                            placeholder=" ">
                         <label for="validade-proposta" class="form-label">Validade da proposta</label>
                     </div>
                     <div class="form-control">
-                        <textarea id="observacoes" rows="3" class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" "></textarea>
+                        <textarea id="observacoes" rows="3"
+                            class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500"
+                            placeholder=" "></textarea>
                         <label for="observacoes" class="form-label">Observações</label>
                     </div>
                 </div>
 
-                <h2 class="text-2xl font-semibold text-white border-b border-gray-700 pb-2 pt-4">Ordem de Faturamento</h2>
-                
+                <h2 class="text-2xl font-semibold text-white border-b border-gray-700 pb-2 pt-4">Ordem de Faturamento
+                </h2>
+
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="form-control">
-                        <input id="valor-faturamento" type="text" class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white" placeholder=" ">
+                        <input id="valor-faturamento" type="text"
+                            class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white"
+                            placeholder=" ">
                         <label for="valor-faturamento" class="form-label">Valor</label>
                     </div>
                     <div class="form-control">
-                        <input id="condicao-pagamento" type="text" class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
+                        <input id="condicao-pagamento" type="text"
+                            class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500"
+                            placeholder=" ">
                         <label for="condicao-pagamento" class="form-label">Condição de pagamento</label>
                     </div>
                 </div>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <div class="form-control">
-                        <input id="autorizado-por" type="text" class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
+                        <input id="autorizado-por" type="text"
+                            class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500"
+                            placeholder=" ">
                         <label for="autorizado-por" class="form-label">Autorizado por</label>
                     </div>
                     <div class="form-control">
-                        <input id="data-aprovacao" type="date" class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
+                        <input id="data-aprovacao" type="date"
+                            class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500"
+                            placeholder=" ">
                         <label for="data-aprovacao" class="form-label">Data de Aprovação</label>
                     </div>
                     <div class="form-control">
-                        <input id="orcamentista" type="text" class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white" placeholder=" " disabled>
+                        <input id="orcamentista" type="text"
+                            class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white"
+                            placeholder=" " disabled>
                         <label for="orcamentista" class="form-label">Orçamentista</label>
                     </div>
                 </div>
                 <div class="form-control">
-                    <input id="endereco-faturamento" type="text" class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500" placeholder=" ">
+                    <input id="endereco-faturamento" type="text"
+                        class="form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white focus:outline-none focus:ring-red-500 focus:border-red-500"
+                        placeholder=" ">
                     <label for="endereco-faturamento" class="form-label">Endereço</label>
                 </div>
-                
+
                 <h2 class="text-2xl font-semibold text-white border-b border-gray-700 pb-2 pt-4">Anexos</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <input type="file" id="anexo1" class="form-input w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-red-800 file:text-white hover:file:bg-red-900">
-                    <input type="file" id="anexo2" class="form-input w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-red-800 file:text-white hover:file:bg-red-900">
-                    <input type="file" id="anexo3" class="form-input w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-red-800 file:text-white hover:file:bg-red-900">
-                    <input type="file" id="anexo4" class="form-input w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-red-800 file:text-white hover:file:bg-red-900">
+                    <input type="file" id="anexo1"
+                        class="form-input w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-red-800 file:text-white hover:file:bg-red-900">
+                    <input type="file" id="anexo2"
+                        class="form-input w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-red-800 file:text-white hover:file:bg-red-900">
+                    <input type="file" id="anexo3"
+                        class="form-input w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-red-800 file:text-white hover:file:bg-red-900">
+                    <input type="file" id="anexo4"
+                        class="form-input w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-red-800 file:text-white hover:file:bg-red-900">
                 </div>
 
                 <div class="flex justify-end gap-4">
-                    <button type="button" id="pdf-button" class="py-2 px-6 rounded-md text-white bg-gray-600 hover:bg-gray-700">Gerar PDF</button>
-                    <button type="submit" class="py-2 px-6 rounded-md text-white bg-red-800 hover:bg-red-900">Salvar Orçamento</button>
+                    <button type="button" id="pdf-button"
+                        class="py-2 px-6 rounded-md text-white bg-gray-600 hover:bg-gray-700">Gerar PDF</button>
+                    <button type="submit" class="py-2 px-6 rounded-md text-white bg-red-800 hover:bg-red-900">Salvar
+                        Orçamento</button>
                 </div>
             </form>
         </div>
     </div>
-    
+
     <!-- Elemento para exibir mensagens de sucesso ou erro -->
     <div id="message-box"></div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, getDocs, query, orderBy, limit, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs, query, orderBy, limit, serverTimestamp, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
+        // ATENÇÃO: Substitua pelas suas credenciais do Firebase
         const firebaseConfig = {
             apiKey: "AIzaSyAWlLRvbcxZQvjzW7KT4A7Ls-iJ0I4BAGI",
             authDomain: "fb-maq.firebaseapp.com",
@@ -314,18 +412,26 @@
         const clienteCpfCnpjInput = document.getElementById('cliente-cpfCnpj');
         const clienteCpfCnpjLabel = document.getElementById('cliente-cpfCnpj-label');
         const orcamentoForm = document.getElementById('orcamento-form');
+        const urlParams = new URLSearchParams(window.location.search);
+        const editingId = urlParams.get("id");
+
 
         onAuthStateChanged(auth, async (user) => {
-            if (user) {
-                document.getElementById('cuidados').value = user.displayName || user.email;
-                document.getElementById('orcamentista').value = user.displayName || user.email;
-                
-                const today = new Date();
-                const yyyy = today.getFullYear();
-                const mm = String(today.getMonth() + 1).padStart(2, '0');
-                const dd = String(today.getDate()).padStart(2, '0');
-                document.getElementById('data').value = `${yyyy}-${mm}-${dd}`;
-                
+            if (!user) {
+                window.location.href = '/index.html';
+                return;
+            }
+
+            document.getElementById('cuidados').value = user.displayName || user.email;
+            document.getElementById('orcamentista').value = user.displayName || user.email;
+
+            const today = new Date();
+            const yyyy = today.getFullYear();
+            const mm = String(today.getMonth() + 1).padStart(2, '0');
+            const dd = String(today.getDate()).padStart(2, '0');
+            document.getElementById('data').value = `${yyyy}-${mm}-${dd}`;
+
+            if (!editingId) {
                 const orcamentosRef = collection(db, "orcamentos");
                 const q = query(orcamentosRef, orderBy("os", "desc"), limit(1));
                 const querySnapshot = await getDocs(q);
@@ -335,28 +441,93 @@
                     nextOs = parseInt(lastOs) + 1;
                 }
                 document.getElementById('os-number').value = String(nextOs).padStart(4, '0');
+            }
 
-                const clientesSnapshot = await getDocs(collection(db, "clientes"));
-                allClients = [];
-                clientesSnapshot.forEach((doc) => {
-                    allClients.push(doc.data());
-                });
+            const clientesSnapshot = await getDocs(collection(db, "clientes"));
+            allClients = [];
+            clientesSnapshot.forEach((docSnap) => {
+                allClients.push(docSnap.data());
+            });
 
-            } else {
-                window.location.href = '/index.html';
+            if (editingId) {
+                document.getElementById("form-title").textContent = "Visualizar/Editar Orçamento";
+
+                const ref = doc(db, "orcamentos", editingId);
+                const snap = await getDoc(ref);
+
+                if (!snap.exists()) {
+                    alert("Orçamento não encontrado!");
+                    window.location.href = "./orcamentos.html";
+                    return;
+                }
+
+                const data = snap.data();
+
+                document.getElementById('os-number').value = data.os || '';
+                document.getElementById('cliente-nome').value = data.clienteNome || '';
+                document.getElementById('cliente-cpfCnpj').value = data.clienteCpfCnpj || '';
+                document.getElementById('endereco').value = data.endereco || '';
+                document.getElementById('telefone').value = data.telefone || '';
+                document.getElementById('email').value = data.email || '';
+                document.getElementById('data').value = data.data || '';
+                document.getElementById('objeto-proposta').value = data.objetoProposta || '';
+                document.getElementById('modelo').value = data.modelo || '';
+                document.getElementById('serie').value = data.serie || '';
+                document.getElementById('horimetro').value = data.horimetro || '';
+                document.getElementById('id-equipamento').value = data.idEquipamento || '';
+                document.getElementById('garantia').value = data.garantia || '';
+                document.getElementById('valor-faturamento').value = data.valorFaturamento || '';
+                document.getElementById('condicao-pagamento').value = data.condicaoPagamento || '';
+                document.getElementById('endereco-faturamento').value = data.enderecoFaturamento || '';
+                document.getElementById('autorizado-por').value = data.autorizadoPor || '';
+                document.getElementById('data-aprovacao').value = data.dataAprovacao || '';
+                document.getElementById('validade-proposta').value = data.validadeProposta || '';
+                document.getElementById('observacoes').value = data.observacoes || '';
+
+                // --- INÍCIO DA CORREÇÃO ---
+                // Preenche os campos de serviço que não estavam sendo carregados
+                const servicoBlock = document.querySelector('.servico-block');
+                if (servicoBlock && data) {
+                    const frotaInput = servicoBlock.querySelector('.frota-equipamento');
+                    const descricaoInput = servicoBlock.querySelector('.descricao');
+                    
+                    if (frotaInput) frotaInput.value = data.frota || '';
+                    if (descricaoInput) descricaoInput.value = data.descricao || '';
+
+                    // Função auxiliar para formatar os números do banco de dados para o formato de moeda
+                    const formatDbNumberToCurrency = (num) => {
+                        if (typeof num !== 'number') return '';
+                        return num.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+                    };
+
+                    const pecasInput = servicoBlock.querySelector('.valor-pecas');
+                    const recuperacoesInput = servicoBlock.querySelector('.valor-recuperacoes');
+                    const servicosInput = servicoBlock.querySelector('.valor-servicos');
+                    const maoObraInput = servicoBlock.querySelector('.valor-mao-obra');
+
+                    if (pecasInput) pecasInput.value = formatDbNumberToCurrency(data.valorPecas);
+                    if (recuperacoesInput) recuperacoesInput.value = formatDbNumberToCurrency(data.valorRecuperacoes);
+                    if (servicosInput) servicosInput.value = formatDbNumberToCurrency(data.valorServicos);
+                    if (maoObraInput) maoObraInput.value = formatDbNumberToCurrency(data.valorMaoObra);
+                    
+                    // Após preencher os valores, é preciso recalcular o total do bloco
+                    calculateTotal(servicoBlock);
+                }
+                // --- FIM DA CORREÇÃO ---
             }
         });
-        
+
+
         clienteNomeInput.addEventListener('input', (e) => {
             const inputValue = e.target.value.toLowerCase();
             clienteSuggestions.innerHTML = '';
-            
+
             if (inputValue.length === 0) {
                 clienteSuggestions.classList.add('hidden');
                 return;
             }
 
-            const filteredClients = allClients.filter(client => 
+            const filteredClients = allClients.filter(client =>
                 (client.razaoSocial || '').toLowerCase().includes(inputValue)
             );
 
@@ -389,7 +560,6 @@
             }
         });
 
-        // --- Lógica de Cálculo e Formatação de Valores ---
         const formatAsCurrency = (value) => {
             if (!value) return '';
             let num = value.toString().replace(/\D/g, '');
@@ -410,7 +580,7 @@
             inputs.forEach(input => {
                 total += parseCurrency(input.value);
             });
-            block.querySelector('.valor-total').value = formatAsCurrency(total.toFixed(2));
+            block.querySelector('.valor-total').value = formatAsCurrency(total.toFixed(2).replace('.', ''));
         };
 
         const addValueInputListeners = (container) => {
@@ -427,8 +597,7 @@
         };
 
         addValueInputListeners(document.getElementById('servicos-container'));
-        
-        // --- Lógica de Adicionar Serviço ---
+
         const addServicoButton = document.getElementById('add-servico-button');
         const servicosContainer = document.getElementById('servicos-container');
         let servicoCounter = 1;
@@ -438,47 +607,45 @@
             const newServiceBlock = document.createElement('div');
             newServiceBlock.className = 'servico-block mt-6';
             newServiceBlock.innerHTML = `
-                <div class="border-t border-gray-700 my-6"></div>
-                <div class="flex justify-between items-center border-b border-gray-700 pb-2 pt-4">
-                    <h2 class="text-2xl font-semibold text-white">Serviços a Executar #${servicoCounter}</h2>
-                    <button type="button" class="remove-servico-button text-gray-400 hover:text-red-500 transition-colors">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                    </button>
-                </div>
-                <div class="form-control mt-6">
-                    <input type="text" class="frota-equipamento form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white" placeholder=" ">
-                    <label class="form-label">Frota do equipamento</label>
-                </div>
-                <div class="form-control mt-6">
-                    <textarea rows="4" class="descricao form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white" placeholder=" "></textarea>
-                    <label class="form-label">Descrição do problema</label>
-                </div>
-                <h3 class="text-xl font-semibold text-white pt-6">Valores</h3>
-                <div class="grid grid-cols-1 md:grid-cols-5 gap-6 mt-4">
-                    <div class="form-control"><input type="text" class="valor-pecas valor-input form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white" placeholder=" "><label class="form-label">Peças</label></div>
-                    <div class="form-control"><input type="text" class="valor-recuperacoes valor-input form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white" placeholder=" "><label class="form-label">Recuperações</label></div>
-                    <div class="form-control"><input type="text" class="valor-servicos valor-input form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white" placeholder=" "><label class="form-label">Serviços</label></div>
-                    <div class="form-control"><input type="text" class="valor-mao-obra valor-input form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white" placeholder=" "><label class="form-label">Mão de obra</label></div>
-                    <div class="form-control"><input type="text" class="valor-total form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white" placeholder=" " disabled><label class="form-label">Total</label></div>
-                </div>
-            `;
+            <div class="border-t border-gray-700 my-6"></div>
+            <div class="flex justify-between items-center border-b border-gray-700 pb-2 pt-4">
+                <h2 class="text-2xl font-semibold text-white">Serviços a Executar #${servicoCounter}</h2>
+                <button type="button" class="remove-servico-button text-gray-400 hover:text-red-500 transition-colors">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </button>
+            </div>
+            <div class="form-control mt-6">
+                <input type="text" class="frota-equipamento form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white" placeholder=" ">
+                <label class="form-label">Frota do equipamento</label>
+            </div>
+            <div class="form-control mt-6">
+                <textarea rows="4" class="descricao form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white" placeholder=" "></textarea>
+                <label class="form-label">Descrição do problema</label>
+            </div>
+            <h3 class="text-xl font-semibold text-white pt-6">Valores</h3>
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-6 mt-4">
+                <div class="form-control"><input type="text" class="valor-pecas valor-input form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white" placeholder=" "><label class="form-label">Peças</label></div>
+                <div class="form-control"><input type="text" class="valor-recuperacoes valor-input form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white" placeholder=" "><label class="form-label">Recuperações</label></div>
+                <div class="form-control"><input type="text" class="valor-servicos valor-input form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white" placeholder=" "><label class="form-label">Serviços</label></div>
+                <div class="form-control"><input type="text" class="valor-mao-obra valor-input form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white" placeholder=" "><label class="form-label">Mão de obra</label></div>
+                <div class="form-control"><input type="text" class="valor-total form-input w-full px-3 py-3 rounded-md border border-gray-600 text-white" placeholder=" " disabled><label class="form-label">Total</label></div>
+            </div>
+        `;
             servicosContainer.appendChild(newServiceBlock);
             addValueInputListeners(newServiceBlock);
-            
+
             newServiceBlock.querySelector('.remove-servico-button').addEventListener('click', (e) => {
                 e.target.closest('.servico-block').remove();
             });
         });
-        
-        // --- Lógica da Máscara de Moeda para Faturamento ---
+
         const valorFaturamentoInput = document.getElementById('valor-faturamento');
         valorFaturamentoInput.addEventListener('input', (e) => {
             e.target.value = formatAsCurrency(e.target.value);
         });
 
-        // --- Função para Coletar Dados do Formulário ---
         const getOrcamentoData = (forPdf = false) => {
             let totalPecas = 0;
             let totalRecuperacoes = 0;
@@ -494,14 +661,14 @@
                 totalServicos += parseCurrency(block.querySelector('.valor-servicos')?.value);
                 totalMaoObra += parseCurrency(block.querySelector('.valor-mao-obra')?.value);
                 totalGeral += parseCurrency(block.querySelector('.valor-total')?.value);
-                
+
                 const desc = block.querySelector('.descricao')?.value;
-                if(desc) descricoes.push(desc);
+                if (desc) descricoes.push(desc);
 
                 const frota = block.querySelector('.frota-equipamento')?.value;
-                if(frota) frotas.push(frota);
+                if (frota) frotas.push(frota);
             });
-            
+
             const data = {
                 os: document.getElementById('os-number').value,
                 clienteNome: document.getElementById('cliente-nome').value,
@@ -553,12 +720,12 @@
                     garantia: data.garantia,
                     frota: data.frota,
                     descricao: data.descricao,
-                    pecas: formatAsCurrency(data.valorPecas.toFixed(2)),
-                    recuperacoes: formatAsCurrency(data.valorRecuperacoes.toFixed(2)),
-                    servicos: formatAsCurrency(data.valorServicos.toFixed(2)),
-                    maoObra: formatAsCurrency(data.valorMaoObra.toFixed(2)),
-                    total: formatAsCurrency(data.valorTotal.toFixed(2)),
-                    valorFaturamento: formatAsCurrency(data.valorFaturamento.toFixed(2)),
+                    pecas: formatAsCurrency(data.valorPecas.toFixed(2).replace('.', '')),
+                    recuperacoes: formatAsCurrency(data.valorRecuperacoes.toFixed(2).replace('.', '')),
+                    servicos: formatAsCurrency(data.valorServicos.toFixed(2).replace('.', '')),
+                    maoObra: formatAsCurrency(data.valorMaoObra.toFixed(2).replace('.', '')),
+                    total: formatAsCurrency(data.valorTotal.toFixed(2).replace('.', '')),
+                    valorFaturamento: formatAsCurrency(data.valorFaturamento.toFixed(2).replace('.', '')),
                     condicaoPagamento: data.condicaoPagamento,
                     enderecoFaturamento: data.enderecoFaturamento,
                     autorizadoPor: data.autorizadoPor,
@@ -570,14 +737,12 @@
             return data;
         };
 
-        // --- Lógica do Botão Gerar PDF ---
         document.getElementById('pdf-button').addEventListener('click', () => {
             const orcamentoDadosParaPdf = getOrcamentoData(true);
             localStorage.setItem('orcamentoDados', JSON.stringify(orcamentoDadosParaPdf));
             window.open('pdf.html', '_blank');
         });
 
-        // --- Lógica de Salvar Orçamento ---
         orcamentoForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const saveButton = e.submitter;
@@ -587,18 +752,22 @@
             const orcamentoParaSalvar = getOrcamentoData(false);
 
             try {
-                await addDoc(collection(db, "orcamentos"), orcamentoParaSalvar);
-                // Armazena a mensagem de sucesso para a próxima página
-                sessionStorage.setItem('showSuccessMessage', 'Orçamento salvo com sucesso!');
+                if (editingId) {
+                    await updateDoc(doc(db, "orcamentos", editingId), orcamentoParaSalvar);
+                    sessionStorage.setItem('showSuccessMessage', 'Orçamento atualizado com sucesso!');
+                } else {
+                    await addDoc(collection(db, "orcamentos"), orcamentoParaSalvar);
+                    sessionStorage.setItem('showSuccessMessage', 'Orçamento salvo com sucesso!');
+                }
                 window.location.href = './orcamentos.html';
             } catch (error) {
                 console.error("Erro ao salvar orçamento: ", error);
-                alert("Ocorreu um erro ao salvar o orçamento. Verifique o console para mais detalhes.");
+                alert("Erro ao salvar o orçamento.");
                 saveButton.disabled = false;
                 saveButton.textContent = 'Salvar Orçamento';
             }
         });
-
     </script>
 </body>
+
 </html>
