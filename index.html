@@ -1,29 +1,128 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Login FBMaq</title>
-  <link rel="icon" href="assets/images/logo.png" type="image/png">
-
-
+  <!-- Favicon (ícone da aba) -->
+  <link rel="icon" href="https://placehold.co/32x32/121212/FFFFFF?text=FB" type="image/png">
   <!-- Tailwind CSS via CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-
   <!-- Fonte Inter via Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
-  <!-- Estilo personalizado do login -->
-  <link rel="stylesheet" href="./css/login.css" />
-</head>
-<body>
+  <!-- Estilos personalizados do arquivo login.css -->
+  <style>
+    /* Estilo base e fontes */
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #121212;
+      /* Fundo escuro */
+    }
 
+    /* Estilo do container com efeito glassmorphism */
+    .glass-container {
+      background: rgba(169, 169, 169, 0.1);
+      /* Transparência sutil */
+      -webkit-backdrop-filter: blur(10px);
+      /* Suporte Safari */
+      backdrop-filter: blur(10px);
+      /* Efeito de desfoque */
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      /* Borda translúcida */
+    }
+
+    /* Efeito neon pulsante (vermelho) */
+    @keyframes pulse-red {
+
+      0%,
+      100% {
+        box-shadow: 0 0 10px rgba(255, 50, 50, 0.4), 0 0 15px rgba(255, 50, 50, 0.3);
+      }
+
+      50% {
+        box-shadow: 0 0 25px rgba(255, 0, 0, 0.8), 0 0 40px rgba(255, 0, 0, 0.6);
+      }
+    }
+
+    .neon-shadow {
+      animation: pulse-red 4s infinite ease-in-out;
+    }
+
+    /* Efeito "brilho" ao passar mouse sobre botão */
+    .shine-effect {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .shine-effect::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 50%;
+      height: 100%;
+      background: linear-gradient(120deg,
+          rgba(255, 255, 255, 0) 0%,
+          rgba(255, 255, 255, 0.25) 50%,
+          rgba(255, 255, 255, 0) 100%);
+      transform: skewX(-25deg);
+      transition: left 0.6s ease-in-out;
+    }
+
+    .shine-effect:hover::before {
+      left: 150%;
+    }
+
+    /* Correção de estilo no autofill do navegador */
+    input:-webkit-autofill,
+    input:-webkit-autofill:hover,
+    input:-webkit-autofill:focus,
+    input:-webkit-autofill:active {
+      -webkit-box-shadow: 0 0 0 30px #1C1C1C inset !important;
+      -webkit-text-fill-color: #FFFFFF !important;
+      transition: background-color 5000s ease-in-out 0s;
+    }
+
+    /* Estilo dos campos com rótulo flutuante */
+    .form-control {
+      position: relative;
+    }
+
+    .form-input {
+      background-color: #1C1C1C;
+    }
+
+    .form-label {
+      position: absolute;
+      top: 0.85rem;
+      left: 0.75rem;
+      color: #9CA3AF;
+      /* gray-400 */
+      pointer-events: none;
+      transition: all 0.2s ease-out;
+    }
+
+    /* Estilo do label ao focar ou preencher o campo */
+    .form-input:focus~.form-label,
+    .form-input:not(:placeholder-shown)~.form-label {
+      transform: translateY(-1.4rem) scale(0.8);
+      color: #F87171;
+      /* red-400 */
+      background-color: #1C1C1C;
+      padding: 0 0.25rem;
+    }
+  </style>
+</head>
+
+<body>
   <!-- Container centralizado -->
   <div class="flex items-center justify-center min-h-screen">
     <div class="w-full max-w-md p-8 space-y-8 glass-container neon-shadow rounded-2xl mx-4">
-      
+
       <!-- Logo da empresa -->
       <div class="text-center">
         <img src="assets/images/logo.png" alt="Logo da Empresa" class="mx-auto h-40 w-auto"
@@ -32,10 +131,8 @@
 
       <!-- Formulário de login -->
       <form id="login-form" class="mt-8 space-y-6">
-
         <!-- Campos do formulário -->
         <div class="rounded-md space-y-6">
-
           <!-- Campo de Email -->
           <div class="form-control">
             <input id="email" name="email" type="email" autocomplete="email" required
@@ -43,69 +140,173 @@
               placeholder="Email" />
             <label for="email" class="form-label">Email</label>
           </div>
-
           <!-- Campo de Senha com botão de mostrar/ocultar -->
           <div class="form-control relative">
             <input id="password" name="password" type="password" autocomplete="current-password" required
               class="form-input appearance-none rounded-md relative block w-full pl-3 pr-12 py-3 border border-gray-600 placeholder-transparent text-white focus:outline-none focus:ring-red-500 focus:border-red-500 sm:text-sm"
               placeholder="Senha" />
             <label for="password" class="form-label">Senha</label>
-
             <!-- Botão de mostrar/ocultar senha -->
             <button type="button" id="toggle-password"
               class="absolute inset-y-0 right-0 z-20 px-3 flex items-center text-gray-400 hover:text-white">
               <!-- Ícone: olho aberto -->
-              <svg id="eye-open" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <svg id="eye-open" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20"
+                fill="currentColor">
                 <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
                 <path fill-rule="evenodd"
                   d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.022 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z"
                   clip-rule="evenodd" />
               </svg>
-
               <!-- Ícone: olho fechado -->
               <svg id="eye-closed" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" viewBox="0 0 20 20"
                 fill="currentColor">
-                <path fill-rule="evenodd"
-                  d="M3.707 2.293a1 1 0 00-1.414 1.414l14 14a1 1 0 001.414-1.414l-1.473-1.473A10.014 10.014 0 0019.542 10C18.268 5.943 14.478 3 10 3a9.958 9.958 0 00-4.512 1.074L3.707 2.293zM10 12a2 2 0 100-4 2 2 0 000 4z"
-                  clip-rule="evenodd" />
-                <path d="M2 10s3.939 7 8 7 8-7 8-7-3.939-7-8-7-8 7-8 7zm7.999-4a4 4 0 100 8 4 4 0 000-8z" />
+                <path
+                  d="M3.707 2.293a1 1 0 00-1.414 1.414l14 14a1 1 0 001.414-1.414L15.49 15.1A9.957 9.957 0 0110 17c-4.478 0-8.268-2.943-9.542-7 .94-2.85 3.29-5.207 6.25-6.39L3.707 2.293zM10 12a2 2 0 110-4 2 2 0 010 4z" />
+                <path d="M10 10.5a.5.5 0 100-1 .5.5 0 000 1z" />
+                <path
+                  d="M10 3a9.958 9.958 0 00-4.512 1.074l1.458 1.458A8.01 8.01 0 0110 5c3.52 0 6.64 2.14 8.042 5-.807 2.45-2.87 4.38-5.38 5.15l1.41 1.41A9.98 9.98 0 0019.542 10C18.268 5.943 14.478 3 10 3z" />
               </svg>
             </button>
           </div>
         </div>
-
         <!-- Opções adicionais -->
         <div class="flex items-center justify-between">
-
+          <!-- Checkbox "Lembrar-me" -->
+          <div class="flex items-center">
+            <input id="remember-me" name="remember-me" type="checkbox"
+              class="h-4 w-4 text-red-600 focus:ring-red-500 border-gray-500 rounded bg-gray-700">
+            <label for="remember-me" class="ml-2 block text-sm text-gray-300">Lembrar-me</label>
+          </div>
           <!-- Link de recuperação -->
           <div class="text-sm">
-            <a href="./pages/reset_password.html" class="font-medium text-gray-300 hover:text-white">Esqueceu a senha?</a>
+            <a href="./pages/reset_password.html" class="font-medium text-gray-300 hover:text-white">Esqueceu a
+              senha?</a>
           </div>
         </div>
-
         <!-- Botão de envio -->
         <div>
           <button type="submit"
             class="shine-effect group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-red-800 bg-opacity-80 hover:bg-red-900 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 focus:ring-offset-gray-800 disabled:opacity-50 disabled:cursor-not-allowed">
             <span class="button-text">Entrar</span>
-
             <!-- Spinner de carregamento -->
             <svg class="animate-spin h-5 w-5 text-white hidden button-spinner" xmlns="http://www.w3.org/2000/svg"
               fill="none" viewBox="0 0 24 24">
               <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
               <path class="opacity-75" fill="currentColor"
-                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+              </path>
             </svg>
           </button>
         </div>
-
         <!-- Mensagem de erro -->
-        <div id="error-message" class="text-center text-red-400 text-sm font-medium hidden pt-2"></div>
+        <div id="error-message" class="text-center text-red-400 text-sm font-medium h-5"></div>
       </form>
     </div>
   </div>
 
   <!-- Script principal do login -->
-  <script type="module" src="./js/login.js"></script>
+  <script type="module">
+    // Importações do Firebase
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import {
+      getAuth,
+      signInWithEmailAndPassword,
+      setPersistence,
+      browserLocalPersistence,
+      browserSessionPersistence
+    } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+
+    // ============================
+    // Configuração Firebase
+    // ============================
+    const firebaseConfig = {
+      apiKey: "AIzaSyAWlLRvbcxZQvjzW7KT4A7Ls-iJ0I4BAGI",
+      authDomain: "fb-maq.firebaseapp.com",
+      projectId: "fb-maq",
+      storageBucket: "fb-maq.appspot.com",
+      messagingSenderId: "782633097930",
+      appId: "1:782633097930:web:281c9ac26470939449b233"
+    };
+
+    // Inicializa Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    // ============================
+    // Lógica para alternar visibilidade da senha
+    // ============================
+    const togglePassword = document.getElementById('toggle-password');
+    const passwordInput = document.getElementById('password');
+    const eyeOpen = document.getElementById('eye-open');
+    const eyeClosed = document.getElementById('eye-closed');
+
+    togglePassword.addEventListener('click', () => {
+      const type = passwordInput.type === 'password' ? 'text' : 'password';
+      passwordInput.type = type;
+      eyeOpen.classList.toggle('hidden');
+      eyeClosed.classList.toggle('hidden');
+    });
+
+    // ============================
+    // Lógica de login com Firebase
+    // ============================
+    const loginForm = document.getElementById('login-form');
+    const errorMessage = document.getElementById('error-message');
+    const submitButton = loginForm.querySelector('button[type="submit"]');
+    const buttonText = submitButton.querySelector('.button-text');
+    const buttonSpinner = submitButton.querySelector('.button-spinner');
+
+    loginForm.addEventListener('submit', async (event) => {
+      event.preventDefault(); // Evita o reload da página
+      errorMessage.textContent = ''; // Limpa erros anteriores
+      errorMessage.classList.add('hidden');
+
+      // Desabilita botão e mostra spinner
+      submitButton.disabled = true;
+      buttonText.classList.add('hidden');
+      buttonSpinner.classList.remove('hidden');
+
+      // Captura dados do formulário
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const rememberMe = document.getElementById('remember-me').checked;
+
+      // Define persistência da sessão
+      const persistence = rememberMe ? browserLocalPersistence : browserSessionPersistence;
+
+      try {
+        // Define persistência
+        await setPersistence(auth, persistence);
+
+        // Tenta logar com email/senha
+        const userCredential = await signInWithEmailAndPassword(auth, email, password);
+        console.log('Login bem-sucedido:', userCredential.user);
+
+        // Redireciona para menu após login
+        window.location.href = './pages/menu.html';
+
+      } catch (error) {
+        // Tratamento de erros
+        console.error("Erro no login:", error.code);
+
+        switch (error.code) {
+          case 'auth/invalid-credential':
+            errorMessage.textContent = 'Email ou senha inválidos.';
+            break;
+          default:
+            errorMessage.textContent = 'Ocorreu um erro ao fazer login.';
+        }
+
+        errorMessage.classList.remove('hidden');
+
+      } finally {
+        // Restaura estado do botão
+        submitButton.disabled = false;
+        buttonText.classList.remove('hidden');
+        buttonSpinner.classList.add('hidden');
+      }
+    });
+  </script>
 </body>
+
 </html>
